@@ -72,6 +72,8 @@ namespace GPSSimulator
             this.comboBox_BaudSelector.Name = "comboBox_BaudSelector";
             this.comboBox_BaudSelector.Size = new System.Drawing.Size(82, 21);
             this.comboBox_BaudSelector.TabIndex = 3;
+            this.comboBox_BaudSelector.SelectedIndexChanged += new System.EventHandler(this.comboBox_BaudSelector_SelectedIndexChanged);
+            this.comboBox_BaudSelector.TextUpdate += new System.EventHandler(this.comboBox_BaudSelector_TextUpdate);
             // 
             // label3
             // 
@@ -89,6 +91,8 @@ namespace GPSSimulator
             this.comboBox_FixRateSelector.Name = "comboBox_FixRateSelector";
             this.comboBox_FixRateSelector.Size = new System.Drawing.Size(64, 21);
             this.comboBox_FixRateSelector.TabIndex = 5;
+            this.comboBox_FixRateSelector.SelectedIndexChanged += new System.EventHandler(this.comboBox_FixRateSelector_SelectedIndexChanged);
+            this.comboBox_FixRateSelector.TextUpdate += new System.EventHandler(this.comboBox_FixRateSelector_TextUpdate);
             // 
             // Form1
             // 

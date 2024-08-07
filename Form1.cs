@@ -15,7 +15,9 @@ namespace GPSSimulator
     public partial class Form1 : Form
     {
 
-        string selectedCOMPort = "";
+        string selectedCOMPort = "COM1";
+        int selectedBaudRate = 38400;
+        int selectedFixRate = 5;
 
         public Form1()
         {
@@ -85,14 +87,47 @@ namespace GPSSimulator
             comboBox_FixRateSelector.Refresh();
         }
 
+        private void printSettings()
+        {
+            Console.WriteLine("Selected COM Port:  " + selectedCOMPort);
+            Console.WriteLine("Selected baud rate: " + selectedBaudRate);
+            Console.WriteLine("Selected fix rate:  " + selectedFixRate);
+        }
+
         private void comboBox_COMSelector_SelectedIndexChanged(object sender, EventArgs e)
         {
             selectedCOMPort = comboBox_COMSelector.SelectedItem.ToString();
+            printSettings();
         }
 
         private void comboBox_COMSelector_TextUpdate(object sender, EventArgs e)
         {
             selectedCOMPort = comboBox_COMSelector.Text;
+            printSettings();
+        }
+
+        private void comboBox_BaudSelector_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            selectedBaudRate = int.Parse(comboBox_BaudSelector.SelectedItem.ToString());
+            printSettings();
+        }
+
+        private void comboBox_BaudSelector_TextUpdate(object sender, EventArgs e)
+        {
+            selectedBaudRate = int.Parse(comboBox_BaudSelector.SelectedItem.ToString());
+            printSettings();
+        }
+
+        private void comboBox_FixRateSelector_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            selectedFixRate = int.Parse(comboBox_FixRateSelector.SelectedItem.ToString());
+            printSettings();
+        }
+
+        private void comboBox_FixRateSelector_TextUpdate(object sender, EventArgs e)
+        {
+            selectedFixRate = int.Parse(comboBox_FixRateSelector.SelectedItem.ToString());
+            printSettings();
         }
     }
 }
