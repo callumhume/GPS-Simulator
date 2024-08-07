@@ -98,24 +98,36 @@ namespace GPSSimulator
         {
             selectedCOMPort = comboBox_COMSelector.SelectedItem.ToString();
             printSettings();
+            if (serialPort1.IsOpen) serialPort1.Close();
+            serialPort1.PortName = selectedCOMPort;
+            serialPort1.Open();
         }
 
         private void comboBox_COMSelector_TextUpdate(object sender, EventArgs e)
         {
             selectedCOMPort = comboBox_COMSelector.Text;
             printSettings();
+            if (serialPort1.IsOpen) serialPort1.Close();
+            serialPort1.PortName = selectedCOMPort;
+            serialPort1.Open();
         }
 
         private void comboBox_BaudSelector_SelectedIndexChanged(object sender, EventArgs e)
         {
             selectedBaudRate = int.Parse(comboBox_BaudSelector.SelectedItem.ToString());
             printSettings();
+            if (serialPort1.IsOpen) serialPort1.Close();
+            serialPort1.BaudRate = selectedBaudRate;
+            serialPort1.Open();
         }
 
         private void comboBox_BaudSelector_TextUpdate(object sender, EventArgs e)
         {
             selectedBaudRate = int.Parse(comboBox_BaudSelector.SelectedItem.ToString());
             printSettings();
+            if (serialPort1.IsOpen) serialPort1.Close();
+            serialPort1.BaudRate = selectedBaudRate;
+            serialPort1.Open();
         }
 
         private void comboBox_FixRateSelector_SelectedIndexChanged(object sender, EventArgs e)

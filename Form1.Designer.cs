@@ -29,12 +29,14 @@ namespace GPSSimulator
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.comboBox_COMSelector = new System.Windows.Forms.ComboBox();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.comboBox_BaudSelector = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.comboBox_FixRateSelector = new System.Windows.Forms.ComboBox();
+            this.serialPort1 = new System.IO.Ports.SerialPort(this.components);
             this.SuspendLayout();
             // 
             // comboBox_COMSelector
@@ -94,6 +96,10 @@ namespace GPSSimulator
             this.comboBox_FixRateSelector.SelectedIndexChanged += new System.EventHandler(this.comboBox_FixRateSelector_SelectedIndexChanged);
             this.comboBox_FixRateSelector.TextUpdate += new System.EventHandler(this.comboBox_FixRateSelector_TextUpdate);
             // 
+            // serialPort1
+            // 
+            this.serialPort1.BaudRate = 115200;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -120,6 +126,7 @@ namespace GPSSimulator
         private System.Windows.Forms.ComboBox comboBox_BaudSelector;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.ComboBox comboBox_FixRateSelector;
+        private System.IO.Ports.SerialPort serialPort1;
     }
 }
 
