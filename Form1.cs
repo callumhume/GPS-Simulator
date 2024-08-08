@@ -28,7 +28,11 @@ namespace GPSSimulator
         Timer gpsFixTimer;
         // User-settable
         double targetSpeed = 10.0; //  km/h // TODO: start/stop button that changes this target in the backend but leaves the original value visible to the user.  Selected target vs current target??
+        double targetBearing = 45.0;
         double acceleration = 0.5; // km/h/sec
+        // TODO: How can we get this from turning radius?  This does not seem to turn at the same radius if the turn angle is obtuse (wider turn) or acute (sharper turn)
+        // Maybe it is, just looks weird because of  map projectiosn.  TODO: test without coordinate smushing
+        double turningRate = 5.0; // Degrees per second
         // Internal
         double latitude = 42.255637;
         double longitude = -85.661945;
@@ -81,7 +85,7 @@ namespace GPSSimulator
 
             if (++updatesInThisDirection >= maxUpdatesThisDirection * selectedFixRate)
             { // For testing purposes, turn 90 degrees to the right every 10 seconds
-                bearing = (bearing + 90) % 360;
+                targetBearing = (targetBearing + 90) % 360;
                 updatesInThisDirection = 0;
                 maxUpdatesThisDirection += selectedFixRate;
             }
@@ -172,6 +176,33 @@ namespace GPSSimulator
             // TODO: Are there considerations to make for spheroid/geoid math or can we assume a local plane??
             // When we add these components to our current coordinates, we need to compensate for the difference in absolute distance vs longitude, right?
             // At more polar latitudes, the same unit of longitude becomes less physical distance as the lines converge
+
+            double bearingChangePerUpdate = turningRate / selectedFixRate;
+            // TODO: If bearing is between 270 and 90, switch systems to -180 to +180 to account for rollover.  Then output results in 0-360
+            // Update bearing as needed.  Same logic as speed updates but we'll need a wraparound at 0/360
+            if (bearing < targetBearing)
+            { // Case need to turn right
+                if (bearing > targetBearing - bearingChangePerUpdate)
+                { // Case within one turning step of target.  Do not overshoot.
+                    bearing = targetBearing;
+                }
+                else
+                { // Case outside one turning step, so make that step
+                    bearing += bearingChangePerUpdate;
+                }
+            }
+            else if (bearing > targetBearing)
+            { // Case need to turn left
+                if (bearing < targetBearing + bearingChangePerUpdate)
+                { // Case within one turning step of target.  Do not overshoot.
+                    bearing = targetBearing;
+                }
+                else
+                { // Case outside one turning step, so make that step.
+                    bearing -= bearingChangePerUpdate;
+                }
+            }
+            // TODO: Account for rollover at 360/0
 
             // remember sin(90) = 1
             // cos (0) = 1
