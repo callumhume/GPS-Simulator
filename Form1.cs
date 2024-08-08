@@ -71,7 +71,40 @@ namespace GPSSimulator
         private void outputGPSFix()
         {
             // TODO: Create an actual GGA sentence
-            serialPrintLine(DateTime.Now.TimeOfDay.ToString());
+            //serialPrintLine(DateTime.Now.TimeOfDay.ToString());
+            TimeSpan fixTime = DateTime.Now.TimeOfDay;
+            // GGA sentence structure:
+            // $GPGGA,hhmmss.ss,ddmm.mm,a,ddmm.mm,a,x,xx,x.x,x.x,M,x.x,M,x.x,xxxx*hh
+            // see https://logiqx.github.io/gps-wizard/nmea/messages/gga.html
+            // GGA tag
+            // TODO: recreate with sprintf so we can get leading zero-padding for things like time and truncate decimals for lat/long
+            string gpsOutput = "$GPGGA,";
+            // Time
+            gpsOutput += fixTime.Hours.ToString();
+            gpsOutput += fixTime.Minutes.ToString();
+            gpsOutput += fixTime.Seconds.ToString();
+            gpsOutput += ".";
+            gpsOutput += (fixTime.Milliseconds / 10).ToString();
+            gpsOutput += ",";
+            // Latitude
+            gpsOutput += Math.Floor(Math.Abs(latitude)).ToString();
+            // TODO: Proper minutes calc
+            gpsOutput += ((Math.Abs(latitude) - Math.Floor(Math.Abs(latitude))) * 60).ToString();
+            gpsOutput += ",";
+            gpsOutput += (latitude > 0 ? "N" : "S");
+            gpsOutput += ",";
+            // Longitude
+            gpsOutput += Math.Floor(Math.Abs(longitude)).ToString();
+            // TODO: Proper minutes calc
+            gpsOutput += ((Math.Abs(longitude) - Math.Floor(Math.Abs(longitude))) * 60).ToString();
+            gpsOutput += ",";
+            gpsOutput += (longitude > 0 ? "E" : "W");
+            gpsOutput += ",";
+            // TODO: the rest of the GGA string
+
+            serialPrintLine(gpsOutput);
+            // TODO: VTG
+
         }
 
         // TODO: Proper geoid compensation
@@ -85,7 +118,7 @@ namespace GPSSimulator
         private void calculateNextGPSFix()
         {
             double deltaTime = 1000.0 / selectedFixRate; // Ideal time, not looking at clock drift forward/backward or taking actual uptime if this task gets fired slightly earlier/later
-            serialPrintLine(deltaTime.ToString());
+            //serialPrintLine(deltaTime.ToString());
             double accelerationPerUpdate = acceleration / selectedFixRate;
             // Update speed as needed.  We're not trying to make a physics simulator here so we only care about acceleration steps.  No jerk or rice krispies here...
             if (speed < targetSpeed)
@@ -119,9 +152,9 @@ namespace GPSSimulator
             // / 1000 (m/msec)
             // ^ deltaTime (m/update)
             double deltaPosition = speed * 1000.0 / 60.0 / 60.0 / selectedFixRate; // Convert km/hr to m/update
-            serialPrintLine(accelerationPerUpdate.ToString());
-            serialPrintLine(speed.ToString());
-            serialPrintLine(deltaPosition.ToString());
+            //serialPrintLine(accelerationPerUpdate.ToString());
+            //serialPrintLine(speed.ToString());
+            //serialPrintLine(deltaPosition.ToString());
             // Methodology:  Delta position is currently in km.  We need to calculate the x/y components with our current bearing in mind.
             // TODO: Are there considerations to make for spheroid/geoid math or can we assume a local plane??
             // When we add these components to our current coordinates, we need to compensate for the difference in absolute distance vs longitude, right?
@@ -132,8 +165,11 @@ namespace GPSSimulator
             // cos gives x component, sin gives y component
             // TODO: Degrees or radians?
             double bearingRadians = Math.PI * bearing / 180.0;
-            double longitudeFactor = Math.Cos(bearingRadians);
-            double latitudeFactor = Math.Sin(bearingRadians);
+            //double longitudeFactor = Math.Cos(bearingRadians);
+            //double latitudeFactor = Math.Sin(bearingRadians);
+            // With needing to mirror bearing around the line x = y, why don't I just switch which component is used where?
+            double latitudeFactor = Math.Cos(bearingRadians);
+            double longitudeFactor = Math.Sin(bearingRadians);
             double longitudeOffset = deltaPosition * longitudeFactor;
             double latitudeOffset = deltaPosition * latitudeFactor;
             // TODO: Latitude compensation.  Currently completely flat-earthing
@@ -212,6 +248,7 @@ namespace GPSSimulator
         {
             chart1.Series.Add("Position");
             chart1.Series.FindByName("Position").ChartType = SeriesChartType.Point;
+            chart1.Series.FindByName("Position").MarkerSize *= 3; 
             chart1.Series.FindByName("Position").ChartArea = "ChartArea1";
             chart1.Series.Add("Trail");
             chart1.Series.FindByName("Trail").ChartType = SeriesChartType.Line;
