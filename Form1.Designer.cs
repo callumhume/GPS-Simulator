@@ -55,6 +55,7 @@ namespace GPSSimulator
             this.label_currentSpeed = new System.Windows.Forms.Label();
             this.label11 = new System.Windows.Forms.Label();
             this.label_Bearing = new System.Windows.Forms.Label();
+            this.checkBox_drawTrail = new System.Windows.Forms.CheckBox();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -80,7 +81,7 @@ namespace GPSSimulator
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(162, 420);
+            this.label2.Location = new System.Drawing.Point(144, 420);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(58, 13);
             this.label2.TabIndex = 2;
@@ -89,7 +90,7 @@ namespace GPSSimulator
             // comboBox_BaudSelector
             // 
             this.comboBox_BaudSelector.FormattingEnabled = true;
-            this.comboBox_BaudSelector.Location = new System.Drawing.Point(227, 417);
+            this.comboBox_BaudSelector.Location = new System.Drawing.Point(208, 417);
             this.comboBox_BaudSelector.Name = "comboBox_BaudSelector";
             this.comboBox_BaudSelector.Size = new System.Drawing.Size(82, 21);
             this.comboBox_BaudSelector.TabIndex = 3;
@@ -99,7 +100,7 @@ namespace GPSSimulator
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(332, 420);
+            this.label3.Location = new System.Drawing.Point(296, 421);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(68, 13);
             this.label3.TabIndex = 4;
@@ -108,7 +109,7 @@ namespace GPSSimulator
             // comboBox_FixRateSelector
             // 
             this.comboBox_FixRateSelector.FormattingEnabled = true;
-            this.comboBox_FixRateSelector.Location = new System.Drawing.Point(406, 417);
+            this.comboBox_FixRateSelector.Location = new System.Drawing.Point(370, 418);
             this.comboBox_FixRateSelector.Name = "comboBox_FixRateSelector";
             this.comboBox_FixRateSelector.Size = new System.Drawing.Size(64, 21);
             this.comboBox_FixRateSelector.TabIndex = 5;
@@ -122,7 +123,7 @@ namespace GPSSimulator
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(496, 420);
+            this.label4.Location = new System.Drawing.Point(440, 421);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(45, 13);
             this.label4.TabIndex = 6;
@@ -131,7 +132,7 @@ namespace GPSSimulator
             // comboBox_NewlineSelector
             // 
             this.comboBox_NewlineSelector.FormattingEnabled = true;
-            this.comboBox_NewlineSelector.Location = new System.Drawing.Point(548, 417);
+            this.comboBox_NewlineSelector.Location = new System.Drawing.Point(491, 418);
             this.comboBox_NewlineSelector.Name = "comboBox_NewlineSelector";
             this.comboBox_NewlineSelector.Size = new System.Drawing.Size(65, 21);
             this.comboBox_NewlineSelector.TabIndex = 7;
@@ -265,11 +266,25 @@ namespace GPSSimulator
             this.label_Bearing.TabIndex = 21;
             this.label_Bearing.Text = "label12";
             // 
+            // checkBox_drawTrail
+            // 
+            this.checkBox_drawTrail.AutoSize = true;
+            this.checkBox_drawTrail.Checked = true;
+            this.checkBox_drawTrail.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox_drawTrail.Location = new System.Drawing.Point(709, 420);
+            this.checkBox_drawTrail.Name = "checkBox_drawTrail";
+            this.checkBox_drawTrail.Size = new System.Drawing.Size(74, 17);
+            this.checkBox_drawTrail.TabIndex = 22;
+            this.checkBox_drawTrail.Text = "Draw Trail";
+            this.checkBox_drawTrail.UseVisualStyleBackColor = true;
+            this.checkBox_drawTrail.CheckedChanged += new System.EventHandler(this.checkBox_drawTrail_CheckedChanged);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.checkBox_drawTrail);
             this.Controls.Add(this.label_Bearing);
             this.Controls.Add(this.label11);
             this.Controls.Add(this.label_currentSpeed);
@@ -326,6 +341,7 @@ namespace GPSSimulator
         private System.Windows.Forms.Label label_currentSpeed;
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label_Bearing;
+        private System.Windows.Forms.CheckBox checkBox_drawTrail;
     }
 }
 

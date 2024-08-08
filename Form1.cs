@@ -16,18 +16,26 @@ namespace GPSSimulator
 {
     public partial class Form1 : Form
     {
-
+        // User-settable, should be saved
         string selectedCOMPort = "COM1";
-        int selectedBaudRate = 38400;
-        int selectedFixRate = 5;
+        int selectedBaudRate = 38400; // TODO: Enum?
+        int selectedFixRate = 5; // TODO: Enum?
         string newline = "\r\n";
+        bool drawTrail = true;
+        // TODO: Start lat/long
+
         Timer gpsFixTimer;
-        double latitude = 42.255637;
-        double longitude = -85.661945;
+        // User-settable
         double targetSpeed = 10.0; //  km/h // TODO: start/stop button that changes this target in the backend but leaves the original value visible to the user.  Selected target vs current target??
         double acceleration = 0.5; // km/h/sec
+        // Internal
+        double latitude = 42.255637;
+        double longitude = -85.661945;
+
         double speed = 0.0;
         double bearing = 45.0;
+
+        int maxTrailPoints = 1000;
 
         public Form1()
         {
@@ -54,6 +62,7 @@ namespace GPSSimulator
         }
 
         int updatesInThisDirection = 0;
+        int maxUpdatesThisDirection = 30;
 
         private void handleGPSCalculations(object sender, EventArgs e)
         {
@@ -61,10 +70,11 @@ namespace GPSSimulator
             setMapPosition(latitude, longitude);
             calculateNextGPSFix();
 
-            if (++updatesInThisDirection >= 30 * selectedFixRate)
+            if (++updatesInThisDirection >= maxUpdatesThisDirection * selectedFixRate)
             { // For testing purposes, turn 90 degrees to the right every 10 seconds
                 bearing = (bearing + 90) % 360;
                 updatesInThisDirection = 0;
+                maxUpdatesThisDirection += selectedFixRate;
             }
         }
 
@@ -189,7 +199,7 @@ namespace GPSSimulator
                 comboBox_COMSelector.Items.Add(COMPorts[i]);
             }
 
-            comboBox_COMSelector.SelectedIndex = 0;
+            comboBox_COMSelector.SelectedIndex = 2;
             comboBox_COMSelector.Refresh();
 
 
@@ -216,7 +226,7 @@ namespace GPSSimulator
                 comboBox_BaudSelector.Items.Add(baudRates[i]);
             }
 
-            comboBox_BaudSelector.SelectedIndex = 3;
+            comboBox_BaudSelector.SelectedIndex = 2;
             comboBox_BaudSelector.Refresh();
 
 
@@ -264,7 +274,8 @@ namespace GPSSimulator
             chart1.Series.FindByName("Position").Points.Clear();
             chart1.Series.FindByName("Position").Points.AddXY(longitude, latitude);
             // Add to trail
-            chart1.Series.FindByName("Trail").Points.AddXY(longitude, latitude);
+            if (chart1.Series.FindByName("Trail").Points.Count >= maxTrailPoints) chart1.Series.FindByName("Trail").Points.RemoveAt(0); // Oldest point at lowest index
+            if (drawTrail) chart1.Series.FindByName("Trail").Points.AddXY(longitude, latitude);
             // Update GUI labels
             label_latitude.Text = latitude.ToString();
             label_longitude.Text = longitude.ToString();
@@ -410,6 +421,11 @@ namespace GPSSimulator
             gpsFixTimer.Stop();
             serialPrintLine("Goodbye!");
             serialPort1.Close();
+        }
+
+        private void checkBox_drawTrail_CheckedChanged(object sender, EventArgs e)
+        {
+            drawTrail = checkBox_drawTrail.Checked;
         }
     }
 }
