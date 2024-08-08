@@ -22,10 +22,10 @@ namespace GPSSimulator
         int selectedFixRate = 5;
         string newline = "\r\n";
         Timer gpsFixTimer;
-        double startLatitude = 42.255637;
-        double startLongitude = -85.661945;
-        double targetSpeed = 2.0; //  km/h // TODO: start/stop button that changes this target in the backend but leaves the original value visible to the user.  Selected target vs current target??
-        double acceleration = 0.2; // km/sec
+        double latitude = 42.255637;
+        double longitude = -85.661945;
+        double targetSpeed = 10.0; //  km/h // TODO: start/stop button that changes this target in the backend but leaves the original value visible to the user.  Selected target vs current target??
+        double acceleration = 0.5; // km/h/sec
         double speed = 0.0;
         double bearing = 45.0;
 
@@ -40,7 +40,7 @@ namespace GPSSimulator
 
             setupMapChart();
 
-            setMapPosition(startLatitude, startLongitude);
+            setMapPosition(latitude, longitude);
 
             // TODO: Select previous settings
 
@@ -53,10 +53,19 @@ namespace GPSSimulator
             // TODO: Create position control logic
         }
 
+        int updatesInThisDirection = 0;
+
         private void handleGPSCalculations(object sender, EventArgs e)
         {
             outputGPSFix();
+            setMapPosition(latitude, longitude);
             calculateNextGPSFix();
+
+            if (++updatesInThisDirection >= 30 * selectedFixRate)
+            { // For testing purposes, turn 90 degrees to the right every 10 seconds
+                bearing = (bearing + 90) % 360;
+                updatesInThisDirection = 0;
+            }
         }
 
         private void outputGPSFix()
@@ -65,9 +74,73 @@ namespace GPSSimulator
             serialPrintLine(DateTime.Now.TimeOfDay.ToString());
         }
 
+        // TODO: Proper geoid compensation
+        // TODO: User-selectable geoid model/datum (WGS-84, etc)
+
+        // At 45 degrees north, one degree latitude is approximately equal to 111,131.745 meters
+        double kmToLatFactor = 111131.745;
+        // At 45 degrees north, one degree longitude is approximately equal to 78,846.805 meters
+        double kmToLonFactor = 78846.805;
+
         private void calculateNextGPSFix()
         {
+            double deltaTime = 1000.0 / selectedFixRate; // Ideal time, not looking at clock drift forward/backward or taking actual uptime if this task gets fired slightly earlier/later
+            serialPrintLine(deltaTime.ToString());
+            double accelerationPerUpdate = acceleration / selectedFixRate;
+            // Update speed as needed.  We're not trying to make a physics simulator here so we only care about acceleration steps.  No jerk or rice krispies here...
+            if (speed < targetSpeed)
+            { // Case need to speed up
+                if (speed > targetSpeed - accelerationPerUpdate)
+                { // Case within one acceleration step of target.  Do not overshoot.
+                    speed = targetSpeed;
+                }
+                else
+                { // Case outside one acceleration step, so make that step
+                    speed += accelerationPerUpdate;
+                }
+            }
+            else if (speed > targetSpeed)
+            { // Case need to slow down
+                if (speed < targetSpeed + accelerationPerUpdate)
+                { // Case within one acceleration step of target.  Do not overshoot.
+                    speed = targetSpeed;
+                }
+                else
+                { // Case outside one acceleration step, so make that step.
+                    speed -= accelerationPerUpdate;
+                }
+            }
+            // Final case, speed is already at target.  No need for further changes until target changes.
+            // Calculate how far we're moving this update
+            // speed (km/hr)
+            // / 60  (km/min)
+            // * 1000 (m/min)
+            // / 60  (m/sec)
+            // / 1000 (m/msec)
+            // ^ deltaTime (m/update)
+            double deltaPosition = speed * 1000.0 / 60.0 / 60.0 / selectedFixRate; // Convert km/hr to m/update
+            serialPrintLine(accelerationPerUpdate.ToString());
+            serialPrintLine(speed.ToString());
+            serialPrintLine(deltaPosition.ToString());
+            // Methodology:  Delta position is currently in km.  We need to calculate the x/y components with our current bearing in mind.
+            // TODO: Are there considerations to make for spheroid/geoid math or can we assume a local plane??
+            // When we add these components to our current coordinates, we need to compensate for the difference in absolute distance vs longitude, right?
+            // At more polar latitudes, the same unit of longitude becomes less physical distance as the lines converge
 
+            // remember sin(90) = 1
+            // cos (0) = 1
+            // cos gives x component, sin gives y component
+            // TODO: Degrees or radians?
+            double bearingRadians = Math.PI * bearing / 180.0;
+            double longitudeFactor = Math.Cos(bearingRadians);
+            double latitudeFactor = Math.Sin(bearingRadians);
+            double longitudeOffset = deltaPosition * longitudeFactor;
+            double latitudeOffset = deltaPosition * latitudeFactor;
+            // TODO: Latitude compensation.  Currently completely flat-earthing
+            longitudeOffset /= kmToLonFactor;
+            latitudeOffset /= kmToLatFactor;
+            longitude += longitudeOffset;
+            latitude += latitudeOffset;
         }
 
         private void populateComboBoxLists()
@@ -143,8 +216,11 @@ namespace GPSSimulator
             chart1.Series.Add("Trail");
             chart1.Series.FindByName("Trail").ChartType = SeriesChartType.Line;
             chart1.Series.FindByName("Trail").ChartArea = "ChartArea1";
+            chart1.ChartAreas.FindByName("ChartArea1").AxisX.LabelStyle.Enabled = false;
+            chart1.ChartAreas.FindByName("ChartArea1").AxisY.LabelStyle.Enabled = false;
         }
 
+        // TODO: Rename to something like updateUI since this is updating map and labels - all the visual feedback to the user
         private void setMapPosition(double latitude, double longitude)
         {
             // Set position
@@ -155,11 +231,13 @@ namespace GPSSimulator
             // Update GUI labels
             label_latitude.Text = latitude.ToString();
             label_longitude.Text = longitude.ToString();
+            label_currentSpeed.Text = speed.ToString();
+            label_Bearing.Text = bearing.ToString();
             // Move map bounds with fixed zoom
-            chart1.ChartAreas.FindByName("ChartArea1").AxisX.Minimum = longitude - 0.01;
-            chart1.ChartAreas.FindByName("ChartArea1").AxisX.Maximum = longitude + 0.01;
-            chart1.ChartAreas.FindByName("ChartArea1").AxisY.Minimum = latitude - 0.01;
-            chart1.ChartAreas.FindByName("ChartArea1").AxisY.Maximum = latitude + 0.01;
+            chart1.ChartAreas.FindByName("ChartArea1").AxisX.Minimum = longitude - 0.001;
+            chart1.ChartAreas.FindByName("ChartArea1").AxisX.Maximum = longitude + 0.001;
+            chart1.ChartAreas.FindByName("ChartArea1").AxisY.Minimum = latitude - 0.001;
+            chart1.ChartAreas.FindByName("ChartArea1").AxisY.Maximum = latitude + 0.001;
             // TODO: Implement user-selectable zoom
         }
 
