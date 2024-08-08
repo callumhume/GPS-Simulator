@@ -56,6 +56,8 @@ namespace GPSSimulator
             this.label11 = new System.Windows.Forms.Label();
             this.label_Bearing = new System.Windows.Forms.Label();
             this.checkBox_drawTrail = new System.Windows.Forms.CheckBox();
+            this.label12 = new System.Windows.Forms.Label();
+            this.comboBox_ProjectionSelector = new System.Windows.Forms.ComboBox();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -279,11 +281,32 @@ namespace GPSSimulator
             this.checkBox_drawTrail.UseVisualStyleBackColor = true;
             this.checkBox_drawTrail.CheckedChanged += new System.EventHandler(this.checkBox_drawTrail_CheckedChanged);
             // 
+            // label12
+            // 
+            this.label12.AutoSize = true;
+            this.label12.Location = new System.Drawing.Point(562, 421);
+            this.label12.Name = "label12";
+            this.label12.Size = new System.Drawing.Size(54, 13);
+            this.label12.TabIndex = 23;
+            this.label12.Text = "Projection";
+            // 
+            // comboBox_ProjectionSelector
+            // 
+            this.comboBox_ProjectionSelector.FormattingEnabled = true;
+            this.comboBox_ProjectionSelector.Location = new System.Drawing.Point(622, 418);
+            this.comboBox_ProjectionSelector.Name = "comboBox_ProjectionSelector";
+            this.comboBox_ProjectionSelector.Size = new System.Drawing.Size(81, 21);
+            this.comboBox_ProjectionSelector.TabIndex = 24;
+            this.comboBox_ProjectionSelector.SelectedIndexChanged += new System.EventHandler(this.comboBox_ProjectionSelector_SelectedIndexChanged);
+            this.comboBox_ProjectionSelector.TextUpdate += new System.EventHandler(this.comboBox_ProjectionSelector_TextUpdate);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.comboBox_ProjectionSelector);
+            this.Controls.Add(this.label12);
             this.Controls.Add(this.checkBox_drawTrail);
             this.Controls.Add(this.label_Bearing);
             this.Controls.Add(this.label11);
@@ -342,6 +365,8 @@ namespace GPSSimulator
         private System.Windows.Forms.Label label11;
         private System.Windows.Forms.Label label_Bearing;
         private System.Windows.Forms.CheckBox checkBox_drawTrail;
+        private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.ComboBox comboBox_ProjectionSelector;
     }
 }
 

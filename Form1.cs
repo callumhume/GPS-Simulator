@@ -21,6 +21,7 @@ namespace GPSSimulator
         int selectedBaudRate = 38400; // TODO: Enum?
         int selectedFixRate = 5; // TODO: Enum?
         string newline = "\r\n";
+        int selectedProjection = 0; // TODO: Enum?
         bool drawTrail = true;
         // TODO: Start lat/long
 
@@ -32,6 +33,14 @@ namespace GPSSimulator
         double latitude = 42.255637;
         double longitude = -85.661945;
 
+        double[] latitudeOffsetFactor = {
+            111131.745,     // Plane - equatorial flat earth scale
+            111131.745      // WGS-84
+        };
+        double[] longitudeOffsetFactor = {
+            111131.745,     // Plane - equatorial flat earth scale
+            78846.805       // WGS-84 @ 45deg north // TODO: Compensate long based on lat
+            };
         double speed = 0.0;
         double bearing = 45.0;
 
@@ -118,12 +127,6 @@ namespace GPSSimulator
         }
 
         // TODO: Proper geoid compensation
-        // TODO: User-selectable geoid model/datum (WGS-84, etc)
-
-        // At 45 degrees north, one degree latitude is approximately equal to 111,131.745 meters
-        double kmToLatFactor = 111131.745;
-        // At 45 degrees north, one degree longitude is approximately equal to 78,846.805 meters
-        double kmToLonFactor = 78846.805;
 
         private void calculateNextGPSFix()
         {
@@ -183,8 +186,8 @@ namespace GPSSimulator
             double longitudeOffset = deltaPosition * longitudeFactor;
             double latitudeOffset = deltaPosition * latitudeFactor;
             // TODO: Latitude compensation.  Currently completely flat-earthing
-            longitudeOffset /= kmToLonFactor;
-            latitudeOffset /= kmToLatFactor;
+            longitudeOffset /= longitudeOffsetFactor[selectedProjection];
+            latitudeOffset /= latitudeOffsetFactor[selectedProjection];
             longitude += longitudeOffset;
             latitude += latitudeOffset;
         }
@@ -252,6 +255,18 @@ namespace GPSSimulator
 
             comboBox_NewlineSelector.SelectedIndex = 2;
             comboBox_NewlineSelector.Refresh();
+
+
+            string[] projectionOptions = { "Plane", "WGS-84" };
+
+            for (int i = 0; i < projectionOptions.Length; i++)
+            {
+                Console.WriteLine(projectionOptions[i].ToString());
+                comboBox_ProjectionSelector.Items.Add(projectionOptions[i]);
+            }
+
+            comboBox_ProjectionSelector.SelectedIndex = 1;
+            comboBox_ProjectionSelector.Refresh();
         }
 
         private void setupMapChart()
@@ -316,13 +331,27 @@ namespace GPSSimulator
 
         private void printSettings()
         {
-            Console.WriteLine("Selected COM Port:  " + selectedCOMPort);
-            Console.WriteLine("Selected baud rate: " + selectedBaudRate);
-            Console.WriteLine("Selected fix rate:  " + selectedFixRate);
+            Console.WriteLine("Selected COM Port:   " + selectedCOMPort);
+            Console.WriteLine("Selected baud rate:  " + selectedBaudRate);
+            Console.WriteLine("Selected fix rate:   " + selectedFixRate);
             string newlinerepresentation = "";
             if (newline.Contains("\r")) newlinerepresentation += "CR";
             if (newline.Contains("\n")) newlinerepresentation += "LF";
-            Console.WriteLine("Selected newline:   " + newlinerepresentation);
+            Console.WriteLine("Selected newline:    " + newlinerepresentation);
+            string projection = "";
+            switch (selectedProjection)
+            {
+                case 0:
+                    projection += "Plane";
+                    break;
+                case 1:
+                    projection += "WGS-84";
+                    break;
+                default:
+                    projection = "Unknown";
+                    break;
+            }
+            Console.WriteLine("Selected projection: " + projection);
 
             serialPrintLine("Test serial output on " + selectedCOMPort);
         }
@@ -411,6 +440,20 @@ namespace GPSSimulator
                     newline = "\r\n";
                     break;
             }
+
+            printSettings();
+        }
+
+        private void comboBox_ProjectionSelector_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            selectedProjection = comboBox_ProjectionSelector.SelectedIndex;
+
+            printSettings();
+        }
+
+        private void comboBox_ProjectionSelector_TextUpdate(object sender, EventArgs e)
+        {
+            selectedProjection = comboBox_ProjectionSelector.SelectedIndex;
 
             printSettings();
         }
