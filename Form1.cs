@@ -100,32 +100,24 @@ namespace GPSSimulator
             // $GPGGA,hhmmss.ss,ddmm.mm,a,ddmm.mm,a,x,xx,x.x,x.x,M,x.x,M,x.x,xxxx*hh
             // see https://logiqx.github.io/gps-wizard/nmea/messages/gga.html
             // GGA tag
-            // TODO: recreate with sprintf so we can get leading zero-padding for things like time and truncate decimals for lat/long
-            string gpsOutput = "$GPGGA,";
-            // Time
-            gpsOutput += fixTime.Hours.ToString();
-            gpsOutput += fixTime.Minutes.ToString();
-            gpsOutput += fixTime.Seconds.ToString();
-            gpsOutput += ".";
-            gpsOutput += (fixTime.Milliseconds / 10).ToString();
-            gpsOutput += ",";
-            // Latitude
-            gpsOutput += Math.Floor(Math.Abs(latitude)).ToString();
-            // TODO: Proper minutes calc
-            gpsOutput += ((Math.Abs(latitude) - Math.Floor(Math.Abs(latitude))) * 60).ToString();
-            gpsOutput += ",";
-            gpsOutput += (latitude > 0 ? "N" : "S");
-            gpsOutput += ",";
-            // Longitude
-            gpsOutput += Math.Floor(Math.Abs(longitude)).ToString();
-            // TODO: Proper minutes calc
-            gpsOutput += ((Math.Abs(longitude) - Math.Floor(Math.Abs(longitude))) * 60).ToString();
-            gpsOutput += ",";
-            gpsOutput += (longitude > 0 ? "E" : "W");
-            gpsOutput += ",";
             // TODO: the rest of the GGA string
+            //       quality
+            //       num sats
+            //       HDOP
+            //       Elevation (start user-configurable, use to compensate for surface speed vs coordinate speed!)
+            //       Elevation units
+            //       Geoid separation
+            //       Geoid separation units
+            //       Differential GPS age
+            //       Differential GPS station ID
+            //       Checksum
+            string formattedGGA = string.Format("$GPGGA,{0:D2}{1:D2}{2:D2}.{3:D2},{4:N0}{5:N7},{6},{7:N0}{8:N7},{9},1,14,1.0,249.01,M,100.0,M,,0000,*CS",
+                fixTime.Hours, fixTime.Minutes, fixTime.Seconds, fixTime.Milliseconds / 10,
+                Math.Floor(Math.Abs(latitude)), (Math.Abs(latitude) - Math.Floor(Math.Abs(latitude))) * 60, latitude > 0 ? "N" : "S",
+                Math.Floor(Math.Abs(longitude)), (Math.Abs(longitude) - Math.Floor(Math.Abs(longitude))) * 60, longitude > 0 ? "E" : "W"
+                );
 
-            serialPrintLine(gpsOutput);
+            serialPrintLine(formattedGGA);
             // TODO: VTG
 
         }
