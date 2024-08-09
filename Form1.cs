@@ -53,7 +53,7 @@ namespace GPSSimulator
         double speed = 0.0;
         double bearing = 45.0;
 
-        int maxTrailPoints = 1000;
+        int maxTrailPoints = 10000;
 
         public Form1()
         {
