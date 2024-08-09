@@ -85,6 +85,7 @@ namespace GPSSimulator
 
             if (++updatesInThisDirection >= maxUpdatesThisDirection * selectedFixRate)
             { // For testing purposes, turn 90 degrees to the right every 10 seconds
+                textBox_TargetBearing.Text = ((targetBearing + 90) % 360).ToString();
                 targetBearing = (targetBearing + 90) % 360;
                 updatesInThisDirection = 0;
                 maxUpdatesThisDirection += selectedFixRate;
