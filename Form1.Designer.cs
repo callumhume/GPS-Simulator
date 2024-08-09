@@ -197,6 +197,8 @@ namespace GPSSimulator
             this.textBox_TargetSpeed.Name = "textBox_TargetSpeed";
             this.textBox_TargetSpeed.Size = new System.Drawing.Size(49, 20);
             this.textBox_TargetSpeed.TabIndex = 13;
+            this.textBox_TargetSpeed.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_TargetSpeed_KeyPress);
+            this.textBox_TargetSpeed.Leave += new System.EventHandler(this.textBox_TargetSpeed_Leave);
             // 
             // label7
             // 
@@ -222,6 +224,8 @@ namespace GPSSimulator
             this.textBox_Accel.Name = "textBox_Accel";
             this.textBox_Accel.Size = new System.Drawing.Size(49, 20);
             this.textBox_Accel.TabIndex = 16;
+            this.textBox_Accel.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_Accel_KeyPress);
+            this.textBox_Accel.Leave += new System.EventHandler(this.textBox_Accel_Leave);
             // 
             // label9
             // 
@@ -300,11 +304,31 @@ namespace GPSSimulator
             this.comboBox_ProjectionSelector.SelectedIndexChanged += new System.EventHandler(this.comboBox_ProjectionSelector_SelectedIndexChanged);
             this.comboBox_ProjectionSelector.TextUpdate += new System.EventHandler(this.comboBox_ProjectionSelector_TextUpdate);
             // 
+            // textBox_TargetBearing
+            // 
+            this.textBox_TargetBearing.Location = new System.Drawing.Point(544, 101);
+            this.textBox_TargetBearing.Name = "textBox_TargetBearing";
+            this.textBox_TargetBearing.Size = new System.Drawing.Size(49, 20);
+            this.textBox_TargetBearing.TabIndex = 25;
+            this.textBox_TargetBearing.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_TargetBearing_KeyPress);
+            this.textBox_TargetBearing.Leave += new System.EventHandler(this.textBox_TargetBearing_Leave);
+            // 
+            // label13
+            // 
+            this.label13.AutoSize = true;
+            this.label13.Location = new System.Drawing.Point(452, 104);
+            this.label13.Name = "label13";
+            this.label13.Size = new System.Drawing.Size(82, 13);
+            this.label13.TabIndex = 26;
+            this.label13.Text = "Target heading:";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.label13);
+            this.Controls.Add(this.textBox_TargetBearing);
             this.Controls.Add(this.comboBox_ProjectionSelector);
             this.Controls.Add(this.label12);
             this.Controls.Add(this.checkBox_drawTrail);
@@ -367,6 +391,8 @@ namespace GPSSimulator
         private System.Windows.Forms.CheckBox checkBox_drawTrail;
         private System.Windows.Forms.Label label12;
         private System.Windows.Forms.ComboBox comboBox_ProjectionSelector;
+        private System.Windows.Forms.TextBox textBox_TargetBearing;
+        private System.Windows.Forms.Label label13;
     }
 }
 

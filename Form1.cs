@@ -503,6 +503,45 @@ namespace GPSSimulator
             printSettings();
         }
 
+        private void textBox_TargetSpeed_Leave(object sender, EventArgs e)
+        {
+            targetSpeed = double.Parse(textBox_TargetSpeed.Text);
+        }
+
+        private void textBox_TargetSpeed_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar.ToString().Contains("\r") || e.KeyChar.ToString().Contains("\n"))
+            {
+                targetSpeed = double.Parse(textBox_TargetSpeed.Text);
+            }
+        }
+
+        private void textBox_Accel_Leave(object sender, EventArgs e)
+        {
+            acceleration = double.Parse(textBox_Accel.Text);
+        }
+
+        private void textBox_Accel_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar.ToString().Contains("\r") || e.KeyChar.ToString().Contains("\n"))
+            {
+                acceleration = double.Parse(textBox_Accel.Text);
+            }
+        }
+
+        private void textBox_TargetBearing_Leave(object sender, EventArgs e)
+        {
+            targetBearing = double.Parse(textBox_TargetBearing.Text);
+        }
+
+        private void textBox_TargetBearing_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar.ToString().Contains("\r") || e.KeyChar.ToString().Contains("\n"))
+            {
+                targetBearing = double.Parse(textBox_TargetBearing.Text);
+            }
+        }
+
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
             // Clean up after ourselves!
