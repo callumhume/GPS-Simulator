@@ -58,6 +58,8 @@ namespace GPSSimulator
             this.checkBox_drawTrail = new System.Windows.Forms.CheckBox();
             this.label12 = new System.Windows.Forms.Label();
             this.comboBox_ProjectionSelector = new System.Windows.Forms.ComboBox();
+            this.textBox_TargetBearing = new System.Windows.Forms.TextBox();
+            this.label13 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
