@@ -60,6 +60,9 @@ namespace GPSSimulator
             this.comboBox_ProjectionSelector = new System.Windows.Forms.ComboBox();
             this.textBox_TargetBearing = new System.Windows.Forms.TextBox();
             this.label13 = new System.Windows.Forms.Label();
+            this.button_ZoomOut = new System.Windows.Forms.Button();
+            this.label_Zoom = new System.Windows.Forms.Label();
+            this.button_ZoomIn = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -241,7 +244,7 @@ namespace GPSSimulator
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(493, 101);
+            this.label10.Location = new System.Drawing.Point(490, 130);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(41, 13);
             this.label10.TabIndex = 18;
@@ -250,7 +253,7 @@ namespace GPSSimulator
             // label_currentSpeed
             // 
             this.label_currentSpeed.AutoSize = true;
-            this.label_currentSpeed.Location = new System.Drawing.Point(544, 101);
+            this.label_currentSpeed.Location = new System.Drawing.Point(541, 130);
             this.label_currentSpeed.Name = "label_currentSpeed";
             this.label_currentSpeed.Size = new System.Drawing.Size(41, 13);
             this.label_currentSpeed.TabIndex = 19;
@@ -259,7 +262,7 @@ namespace GPSSimulator
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(488, 123);
+            this.label11.Location = new System.Drawing.Point(485, 152);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(46, 13);
             this.label11.TabIndex = 20;
@@ -268,7 +271,7 @@ namespace GPSSimulator
             // label_Bearing
             // 
             this.label_Bearing.AutoSize = true;
-            this.label_Bearing.Location = new System.Drawing.Point(544, 123);
+            this.label_Bearing.Location = new System.Drawing.Point(541, 152);
             this.label_Bearing.Name = "label_Bearing";
             this.label_Bearing.Size = new System.Drawing.Size(41, 13);
             this.label_Bearing.TabIndex = 21;
@@ -324,11 +327,45 @@ namespace GPSSimulator
             this.label13.TabIndex = 26;
             this.label13.Text = "Target heading:";
             // 
+            // button_ZoomOut
+            // 
+            this.button_ZoomOut.Location = new System.Drawing.Point(692, 72);
+            this.button_ZoomOut.Name = "button_ZoomOut";
+            this.button_ZoomOut.Size = new System.Drawing.Size(75, 23);
+            this.button_ZoomOut.TabIndex = 27;
+            this.button_ZoomOut.Text = "Zoom out";
+            this.button_ZoomOut.UseVisualStyleBackColor = true;
+            this.button_ZoomOut.Click += new System.EventHandler(this.button_ZoomOut_Click);
+            // 
+            // label_Zoom
+            // 
+            this.label_Zoom.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label_Zoom.AutoSize = true;
+            this.label_Zoom.Location = new System.Drawing.Point(706, 104);
+            this.label_Zoom.Name = "label_Zoom";
+            this.label_Zoom.Size = new System.Drawing.Size(41, 13);
+            this.label_Zoom.TabIndex = 28;
+            this.label_Zoom.Text = "label14";
+            // 
+            // button_ZoomIn
+            // 
+            this.button_ZoomIn.Location = new System.Drawing.Point(692, 125);
+            this.button_ZoomIn.Name = "button_ZoomIn";
+            this.button_ZoomIn.Size = new System.Drawing.Size(75, 23);
+            this.button_ZoomIn.TabIndex = 29;
+            this.button_ZoomIn.Text = "Zoom in";
+            this.button_ZoomIn.UseVisualStyleBackColor = true;
+            this.button_ZoomIn.Click += new System.EventHandler(this.button_ZoomIn_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.button_ZoomIn);
+            this.Controls.Add(this.label_Zoom);
+            this.Controls.Add(this.button_ZoomOut);
             this.Controls.Add(this.label13);
             this.Controls.Add(this.textBox_TargetBearing);
             this.Controls.Add(this.comboBox_ProjectionSelector);
@@ -395,6 +432,9 @@ namespace GPSSimulator
         private System.Windows.Forms.ComboBox comboBox_ProjectionSelector;
         private System.Windows.Forms.TextBox textBox_TargetBearing;
         private System.Windows.Forms.Label label13;
+        private System.Windows.Forms.Button button_ZoomOut;
+        private System.Windows.Forms.Label label_Zoom;
+        private System.Windows.Forms.Button button_ZoomIn;
     }
 }
 

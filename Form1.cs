@@ -23,6 +23,7 @@ namespace GPSSimulator
         string newline = "\r\n";
         int selectedProjection = 0; // TODO: Enum?
         bool drawTrail = true;
+        int zoomLevel = 2; // Potential list: 10, 25, 50, 100, 250, 500, 1000
         // TODO: Start lat/long
 
         Timer gpsFixTimer;
@@ -57,7 +58,7 @@ namespace GPSSimulator
             gpsFixTimer.Interval = 1000 / selectedFixRate;
             gpsFixTimer.Tick += new EventHandler(handleGPSCalculations);
 
-            populateComboBoxLists();
+            populateUIElements();
 
             setupMapChart();
 
@@ -238,7 +239,7 @@ namespace GPSSimulator
             latitude += latitudeOffset;
         }
 
-        private void populateComboBoxLists()
+        private void populateUIElements()
         {
             string[] COMPorts = SerialPort.GetPortNames();
 
@@ -313,6 +314,36 @@ namespace GPSSimulator
 
             comboBox_ProjectionSelector.SelectedIndex = 1;
             comboBox_ProjectionSelector.Refresh();
+
+            textBox_TargetSpeed.Text = targetSpeed.ToString();
+            textBox_Accel.Text = acceleration.ToString();
+            textBox_TargetBearing.Text = targetBearing.ToString();
+
+            label_Zoom.Text = getZoomLevelMeters(zoomLevel).ToString();
+        }
+
+        private double getZoomLevelMeters(int zoomIndex)
+        {
+            switch (zoomIndex)
+            { // Yeah, this really should be an enum... Whatever
+                case 1:
+                    return 10;
+                case 2:
+                    return 25;
+                case 3:
+                    return 50;
+                case 4:
+                    return 100;
+                case 5:
+                    return 250;
+                case 6:
+                    return 500;
+                case 7:
+                    return 1000;
+                case 0:
+                default:
+                    return 5;
+            }
         }
 
         private void setupMapChart()
@@ -343,10 +374,10 @@ namespace GPSSimulator
             label_currentSpeed.Text = speed.ToString();
             label_Bearing.Text = bearing.ToString();
             // Move map bounds with fixed zoom
-            chart1.ChartAreas.FindByName("ChartArea1").AxisX.Minimum = longitude - 0.001;
-            chart1.ChartAreas.FindByName("ChartArea1").AxisX.Maximum = longitude + 0.001;
-            chart1.ChartAreas.FindByName("ChartArea1").AxisY.Minimum = latitude - 0.001;
-            chart1.ChartAreas.FindByName("ChartArea1").AxisY.Maximum = latitude + 0.001;
+            chart1.ChartAreas.FindByName("ChartArea1").AxisX.Minimum = longitude - (getZoomLevelMeters(zoomLevel) / 2 / longitudeOffsetFactor[selectedProjection]);
+            chart1.ChartAreas.FindByName("ChartArea1").AxisX.Maximum = longitude + (getZoomLevelMeters(zoomLevel) / 2 / longitudeOffsetFactor[selectedProjection]);
+            chart1.ChartAreas.FindByName("ChartArea1").AxisY.Minimum = latitude - (getZoomLevelMeters(zoomLevel) / 2 / latitudeOffsetFactor[selectedProjection]);
+            chart1.ChartAreas.FindByName("ChartArea1").AxisY.Maximum = latitude + (getZoomLevelMeters(zoomLevel) / 2 / latitudeOffsetFactor[selectedProjection]);
             // TODO: Implement user-selectable zoom
         }
 
@@ -504,6 +535,11 @@ namespace GPSSimulator
             printSettings();
         }
 
+        private void checkBox_drawTrail_CheckedChanged(object sender, EventArgs e)
+        {
+            drawTrail = checkBox_drawTrail.Checked;
+        }
+
         private void textBox_TargetSpeed_Leave(object sender, EventArgs e)
         {
             targetSpeed = double.Parse(textBox_TargetSpeed.Text);
@@ -551,9 +587,24 @@ namespace GPSSimulator
             serialPort1.Close();
         }
 
-        private void checkBox_drawTrail_CheckedChanged(object sender, EventArgs e)
+        private void button_ZoomIn_Click(object sender, EventArgs e)
         {
-            drawTrail = checkBox_drawTrail.Checked;
+            if (zoomLevel > 0)
+            {
+                zoomLevel--;
+                label_Zoom.Text = getZoomLevelMeters(zoomLevel).ToString();
+                // TODO: Update map?  Next position update should take care of this
+            }
+        }
+
+        private void button_ZoomOut_Click(object sender, EventArgs e)
+        {
+            if (zoomLevel < 7)
+            { // TODO: Defined zoom limit
+                zoomLevel++;
+                label_Zoom.Text = getZoomLevelMeters(zoomLevel).ToString();
+                // TODO: Update map?  Next position update should take care of this
+            }
         }
     }
 }
