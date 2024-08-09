@@ -33,15 +33,19 @@ namespace GPSSimulator
         double acceleration = 0.5; // km/h/sec
         // TODO: How can we get this from turning radius?  This does not seem to turn at the same radius if the turn angle is obtuse (wider turn) or acute (sharper turn)
         // Maybe it is, just looks weird because of  map projectiosn.  TODO: test without coordinate smushing
+        // Turning seems to work fine on planar projection.  Even has a wider turning radius at a higher speed, which makes sense
+        // TODO: Once auto-turn is implemented, also implement speed-up/slow-down for turn-arounds
         double turningRate = 5.0; // Degrees per second
         // Internal
         double latitude = 42.255637;
         double longitude = -85.661945;
 
+        // Meters per degree
         double[] latitudeOffsetFactor = {
             111131.745,     // Plane - equatorial flat earth scale
             111131.745      // WGS-84
         };
+        // Meters per degree
         double[] longitudeOffsetFactor = {
             111131.745,     // Plane - equatorial flat earth scale
             78846.805       // WGS-84 @ 45deg north // TODO: Compensate long based on lat
