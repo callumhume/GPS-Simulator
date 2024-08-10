@@ -321,11 +321,11 @@ namespace GPSSimulator
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(452, 104);
+            this.label13.Location = new System.Drawing.Point(455, 104);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(82, 13);
+            this.label13.Size = new System.Drawing.Size(79, 13);
             this.label13.TabIndex = 26;
-            this.label13.Text = "Target heading:";
+            this.label13.Text = "Target bearing:";
             // 
             // button_ZoomOut
             // 
