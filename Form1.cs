@@ -25,6 +25,16 @@ namespace GPSSimulator
         bool drawTrail = true;
         int zoomLevel = 2; // Potential list: 10, 25, 50, 100, 250, 500, 1000
         // TODO: Start lat/long
+        int demoDriveType = 1; // 0 = spiral CW
+                               // 1 = spiral CCW
+                               // 2 = rows
+                               // TODO: enum
+                               // TODO: UI selector
+        int turnMode = 1; // 0 = auto (nearest)
+                          // 1 = CW / right turn
+                          // 2 = CCW / left turn
+                          // TODO: enum
+                          // TODO: UI selector
 
         Timer gpsFixTimer;
         // User-settable
@@ -52,6 +62,7 @@ namespace GPSSimulator
             };
         double speed = 0.0;
         double bearing = 45.0;
+        double distanceTraveled = 0.0;
 
         int maxTrailPoints = 10000;
 
@@ -88,12 +99,41 @@ namespace GPSSimulator
             setMapPosition(latitude, longitude);
             calculateNextGPSFix();
 
-            if (++updatesInThisDirection >= maxSecondsThisDirection * selectedFixRate)
-            { // For testing purposes, turn 90 degrees to the right every 10 seconds
-                textBox_TargetBearing.Text = ((targetBearing - 45 + 360) % 360).ToString();
-                targetBearing = (targetBearing - 45 + 360) % 360;
-                updatesInThisDirection = 0;
-                maxSecondsThisDirection += selectedFixRate;
+            if (checkBox_DemoDrive.Checked)
+            {
+                switch (demoDriveType)
+                {
+                    case 0: // Clockwise spiral
+                        if (++updatesInThisDirection >= maxSecondsThisDirection * selectedFixRate)
+                        { // For testing purposes, turn 90 degrees to the left every x seconds
+                            targetBearing = (targetBearing + 45 + 360) % 360;
+                            textBox_TargetBearing.Text = targetBearing.ToString();
+                            updatesInThisDirection = 0;
+                            maxSecondsThisDirection += selectedFixRate;
+                        }
+                        break;
+                    case 1: // Counter-clockwise spiral
+                        if (++updatesInThisDirection >= maxSecondsThisDirection * selectedFixRate)
+                        { // For testing purposes, turn 90 degrees to the right every x seconds
+                            targetBearing = (targetBearing - 45 + 360) % 360;
+                            textBox_TargetBearing.Text = targetBearing.ToString();
+                            updatesInThisDirection = 0;
+                            maxSecondsThisDirection += selectedFixRate;
+                        }
+                        break;
+                    case 2: // Rows
+                    default:
+                        // TODO: Fixed number of updates?
+                        if (++updatesInThisDirection >= maxSecondsThisDirection * selectedFixRate)
+                        { // For testing purposes, turn 180 degrees every x seconds
+                            targetBearing = (targetBearing + 180 + 360) % 360;
+                            textBox_TargetBearing.Text = targetBearing.ToString();
+                            updatesInThisDirection = 0;
+                            maxSecondsThisDirection += selectedFixRate;
+                        }
+                        break;
+                }
+
             }
         }
 
@@ -189,6 +229,8 @@ namespace GPSSimulator
             // / 1000 (m/msec)
             // ^ deltaTime (m/update)
             double deltaPosition = speed * 1000.0 / 60.0 / 60.0 / selectedFixRate; // Convert km/hr to m/update
+            distanceTraveled += deltaPosition / 1000; // Track distance in km
+            label_distanceTraveled.Text = distanceTraveled.ToString("N3");
             //serialPrintLine(accelerationPerUpdate.ToString());
             //serialPrintLine(speed.ToString());
             //serialPrintLine(deltaPosition.ToString());
@@ -197,62 +239,138 @@ namespace GPSSimulator
             // When we add these components to our current coordinates, we need to compensate for the difference in absolute distance vs longitude, right?
             // At more polar latitudes, the same unit of longitude becomes less physical distance as the lines converge
 
+            // TODO: When implementing right/left turn options, this might get taken care of.  But a graceful/predictable implementation for "turn 180 degrees"
+
             double bearingChangePerUpdate = turningRate / selectedFixRate;
-            // TODO: If bearing is between 270 and 90, switch systems to -180 to +180 to account for rollover.  Then output results in 0-360
+            // If bearing is between 270 and 90, switch systems to -180 to +180 to account for rollover.  Then output results in 0-360
             // Update bearing as needed.  Same logic as speed updates but we'll need a wraparound at 0/360
-            if (bearing < 90 || bearing >= 270)
-            { // Current bearing is between 270 and 90 (north-facing)
-                //Console.WriteLine("Adjusted bearing is " + (bearing > 180 ? bearing - 360 : bearing) + " and adjusted target is " + (targetBearing > 180 ? targetBearing - 360 : targetBearing));
-                // Do all conversions absed solely on bearing.  If bearing gets converted, so does targetBearing. Nevermind...
-                if ( (bearing > 180 ? bearing - 360 : bearing) < (targetBearing > 180 ? targetBearing - 360 : targetBearing))
-                { // Case need to turn right TODO: Verify C# functionality of % with negative numbers
-                    if ((bearing > 180 ? bearing - 360 : bearing) > (targetBearing > 180 ? targetBearing - 360 : targetBearing) - bearingChangePerUpdate)
-                    { // Case within one turning step of target.  Do not overshoot.
-                        bearing = targetBearing;
+
+            switch (turnMode)
+            {
+                case 1:
+                    // Clockwise (right) turns only
+                    // TODO: May still need to account for w0-degree rollover like auto turns...
+                    if (bearing < 90 || bearing >= 270 || targetBearing < 90 || targetBearing >= 270)
+                    {
+                        if ((bearing > 180 ? bearing - 360 : bearing) != (targetBearing > 180 ? targetBearing - 360 : targetBearing))
+                        {
+                            if ((bearing > 180 ? bearing - 360 : bearing) < (targetBearing > 180 ? targetBearing - 360 : targetBearing) && (bearing > 180 ? bearing - 360 : bearing) + bearingChangePerUpdate > (targetBearing > 180 ? targetBearing - 360 : targetBearing))
+                            { // Need to step right, but one step will overshoot.  Set to target.
+                                bearing = targetBearing;
+                            }
+                            else
+                            { // Normal update step to the right
+                                bearing = (bearing + bearingChangePerUpdate) % 360;
+                            }
+                        }
                     }
                     else
-                    { // Case outside one turning step, so make that step
-                        bearing = (bearing + bearingChangePerUpdate) % 360;
+                    {
+                        if (bearing != targetBearing)
+                        {
+                            if (bearing < targetBearing && bearing + bearingChangePerUpdate > targetBearing)
+                            { // Need to step right, but one step will overshoot.  Set to target.
+                                bearing = targetBearing;
+                            }
+                            else
+                            { // Normal update step to the right
+                                bearing = (bearing + bearingChangePerUpdate) % 360;
+                            }
+                        }
                     }
-                }
-                else if ( (bearing > 180 ? bearing - 360 : bearing) > (targetBearing > 180 ? targetBearing - 360 : targetBearing) )
-                { // Case need to turn left
-                    if ((bearing > 180 ? bearing - 360 : bearing) < (targetBearing > 180 ? targetBearing - 360 : targetBearing) + bearingChangePerUpdate)
-                    { // Case within one turning step of target.  Do not overshoot.
-                        bearing = targetBearing; // TODO: turning left across north turns instantly...
+                    break;
+                case 2:
+                    // Counter-clockwise (left) turns only
+                    // TODO: May still need to account for w0-degree rollover like auto turns...
+                    if (bearing < 90 || bearing >= 270 || targetBearing < 90 || targetBearing >= 270)
+                    {
+                        if ((bearing > 180 ? bearing - 360 : bearing) != (targetBearing > 180 ? targetBearing - 360 : targetBearing))
+                        {
+                            if ((bearing > 180 ? bearing - 360 : bearing) > (targetBearing > 180 ? targetBearing - 360 : targetBearing) && (bearing > 180 ? bearing - 360 : bearing) - bearingChangePerUpdate < (targetBearing > 180 ? targetBearing - 360 : targetBearing))
+                            { // Need to step left, but one step will overshoot.  Set to target.
+                                bearing = targetBearing;
+                            }
+                            else
+                            { // Normal update step to the left
+                                bearing = (bearing - bearingChangePerUpdate) % 360;
+                            }
+                        }
                     }
                     else
-                    { // Case outside one turning step, so make that step.
-                        bearing = (bearing - bearingChangePerUpdate + 360) % 360;
+                    {
+                        if (bearing != targetBearing)
+                        {
+                            if (bearing > targetBearing && bearing - bearingChangePerUpdate < targetBearing)
+                            { // Need to step left, but one step will overshoot.  Set to target.
+                                bearing = targetBearing;
+                            }
+                            else
+                            { // Normal update step to the left
+                                bearing = (bearing - bearingChangePerUpdate) % 360;
+                            }
+                        }
                     }
-                }
+                    break;
+                case 0:
+                default:
+                    // Auto (nearest) turns
+                    if (bearing < 90 || bearing >= 270 || targetBearing < 90 || targetBearing >= 270)
+                    { // Current bearing is between 270 and 90 (north-facing)
+                      //Console.WriteLine("Adjusted bearing is " + (bearing > 180 ? bearing - 360 : bearing) + " and adjusted target is " + (targetBearing > 180 ? targetBearing - 360 : targetBearing));
+                      // Do all conversions absed solely on bearing.  If bearing gets converted, so does targetBearing. Nevermind...
+                        if ((bearing > 180 ? bearing - 360 : bearing) < (targetBearing > 180 ? targetBearing - 360 : targetBearing))
+                        { // Case need to turn right TODO: Verify C# functionality of % with negative numbers
+                            if ((bearing > 180 ? bearing - 360 : bearing) > (targetBearing > 180 ? targetBearing - 360 : targetBearing) - bearingChangePerUpdate)
+                            { // Case within one turning step of target.  Do not overshoot.
+                                bearing = targetBearing;
+                            }
+                            else
+                            { // Case outside one turning step, so make that step
+                                bearing = (bearing + bearingChangePerUpdate) % 360;
+                            }
+                        }
+                        else if ((bearing > 180 ? bearing - 360 : bearing) > (targetBearing > 180 ? targetBearing - 360 : targetBearing))
+                        { // Case need to turn left
+                            if ((bearing > 180 ? bearing - 360 : bearing) < (targetBearing > 180 ? targetBearing - 360 : targetBearing) + bearingChangePerUpdate)
+                            { // Case within one turning step of target.  Do not overshoot.
+                                bearing = targetBearing; // TODO: turning left across north turns instantly...
+                            }
+                            else
+                            { // Case outside one turning step, so make that step.
+                                bearing = (bearing - bearingChangePerUpdate + 360) % 360;
+                            }
+                        }
+                    }
+                    else
+                    { // Current bearing is between 90 and 270 (south-facing)
+                      //Console.WriteLine("Normal bearing is " + bearing + " and normal target is " + targetBearing);
+                        if (bearing < targetBearing)
+                        { // Case need to turn right
+                            if (bearing > targetBearing - bearingChangePerUpdate)
+                            { // Case within one turning step of target.  Do not overshoot.
+                                bearing = targetBearing;
+                            }
+                            else
+                            { // Case outside one turning step, so make that step
+                                bearing += bearingChangePerUpdate;
+                            }
+                        }
+                        else if (bearing > targetBearing)
+                        { // Case need to turn left
+                            if (bearing < targetBearing + bearingChangePerUpdate)
+                            { // Case within one turning step of target.  Do not overshoot.
+                                bearing = targetBearing;
+                            }
+                            else
+                            { // Case outside one turning step, so make that step.
+                                bearing -= bearingChangePerUpdate;
+                            }
+                        }
+                    }
+                    break;
             }
-            else
-            { // Current bearing is between 90 and 270 (south-facing)
-                //Console.WriteLine("Normal bearing is " + bearing + " and normal target is " + targetBearing);
-                if (bearing < targetBearing)
-                { // Case need to turn right
-                    if (bearing > targetBearing - bearingChangePerUpdate)
-                    { // Case within one turning step of target.  Do not overshoot.
-                        bearing = targetBearing;
-                    }
-                    else
-                    { // Case outside one turning step, so make that step
-                        bearing += bearingChangePerUpdate;
-                    }
-                }
-                else if (bearing > targetBearing)
-                { // Case need to turn left
-                    if (bearing < targetBearing + bearingChangePerUpdate)
-                    { // Case within one turning step of target.  Do not overshoot.
-                        bearing = targetBearing;
-                    }
-                    else
-                    { // Case outside one turning step, so make that step.
-                        bearing -= bearingChangePerUpdate;
-                    }
-                }
-            }
+
+            
             // TODO: Account for rollover at 360/0
 
             // remember sin(90) = 1
@@ -284,7 +402,7 @@ namespace GPSSimulator
                 comboBox_COMSelector.Items.Add(COMPorts[i]);
             }
 
-            comboBox_COMSelector.SelectedIndex = 2;
+            comboBox_COMSelector.SelectedIndex = 1;
             comboBox_COMSelector.Refresh();
 
 
@@ -638,6 +756,60 @@ namespace GPSSimulator
                 zoomLevel++;
                 label_Zoom.Text = getZoomLevelMeters(zoomLevel).ToString();
             }
+        }
+
+        private void button_North_Click(object sender, EventArgs e)
+        {
+            targetBearing = 0;
+            textBox_TargetBearing.Text = targetBearing.ToString();
+        }
+
+        private void button_NorthEast_Click(object sender, EventArgs e)
+        {
+            targetBearing = 45;
+            textBox_TargetBearing.Text = targetBearing.ToString();
+        }
+
+        private void button_East_Click(object sender, EventArgs e)
+        {
+            targetBearing = 90;
+            textBox_TargetBearing.Text = targetBearing.ToString();
+        }
+
+        private void button_SouthEast_Click(object sender, EventArgs e)
+        {
+            targetBearing = 135;
+            textBox_TargetBearing.Text = targetBearing.ToString();
+        }
+
+        private void button_South_Click(object sender, EventArgs e)
+        {
+            targetBearing = 180;
+            textBox_TargetBearing.Text = targetBearing.ToString();
+        }
+
+        private void button_SouthWest_Click(object sender, EventArgs e)
+        {
+            targetBearing = 225;
+            textBox_TargetBearing.Text = targetBearing.ToString();
+        }
+
+        private void button_West_Click(object sender, EventArgs e)
+        {
+            targetBearing = 270;
+            textBox_TargetBearing.Text = targetBearing.ToString();
+        }
+
+        private void button_NorthWest_Click(object sender, EventArgs e)
+        {
+            targetBearing = 315;
+            textBox_TargetBearing.Text = targetBearing.ToString();
+        }
+
+        private void button_ResetDistance_Click(object sender, EventArgs e)
+        {
+            distanceTraveled = 0;
+            label_distanceTraveled.Text = distanceTraveled.ToString("N3");
         }
     }
 }

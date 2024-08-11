@@ -63,6 +63,22 @@ namespace GPSSimulator
             this.button_ZoomOut = new System.Windows.Forms.Button();
             this.label_Zoom = new System.Windows.Forms.Label();
             this.button_ZoomIn = new System.Windows.Forms.Button();
+            this.label14 = new System.Windows.Forms.Label();
+            this.label15 = new System.Windows.Forms.Label();
+            this.label16 = new System.Windows.Forms.Label();
+            this.label17 = new System.Windows.Forms.Label();
+            this.button_North = new System.Windows.Forms.Button();
+            this.button_East = new System.Windows.Forms.Button();
+            this.button_South = new System.Windows.Forms.Button();
+            this.button_West = new System.Windows.Forms.Button();
+            this.button_NorthWest = new System.Windows.Forms.Button();
+            this.button_NorthEast = new System.Windows.Forms.Button();
+            this.button_SouthWest = new System.Windows.Forms.Button();
+            this.button_SouthEast = new System.Windows.Forms.Button();
+            this.checkBox_DemoDrive = new System.Windows.Forms.CheckBox();
+            this.label18 = new System.Windows.Forms.Label();
+            this.label_distanceTraveled = new System.Windows.Forms.Label();
+            this.button_ResetDistance = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -358,11 +374,183 @@ namespace GPSSimulator
             this.button_ZoomIn.UseVisualStyleBackColor = true;
             this.button_ZoomIn.Click += new System.EventHandler(this.button_ZoomIn_Click);
             // 
+            // label14
+            // 
+            this.label14.AutoSize = true;
+            this.label14.Location = new System.Drawing.Point(440, 348);
+            this.label14.Name = "label14";
+            this.label14.Size = new System.Drawing.Size(269, 13);
+            this.label14.TabIndex = 30;
+            this.label14.Text = "TODO: Bearing buttons (cardinals, ordinals, in-between)";
+            // 
+            // label15
+            // 
+            this.label15.AutoSize = true;
+            this.label15.Location = new System.Drawing.Point(440, 365);
+            this.label15.Name = "label15";
+            this.label15.Size = new System.Drawing.Size(162, 13);
+            this.label15.TabIndex = 31;
+            this.label15.Text = "TODO: Turn right, left, or nearest";
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(440, 382);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(102, 13);
+            this.label16.TabIndex = 32;
+            this.label16.Text = "TODO: Swath width";
+            // 
+            // label17
+            // 
+            this.label17.AutoSize = true;
+            this.label17.Location = new System.Drawing.Point(440, 399);
+            this.label17.Name = "label17";
+            this.label17.Size = new System.Drawing.Size(327, 13);
+            this.label17.TabIndex = 33;
+            this.label17.Text = "TODO: Automatic turn (bulb, three-point, normal turn if wide enough)";
+            // 
+            // button_North
+            // 
+            this.button_North.Location = new System.Drawing.Point(531, 207);
+            this.button_North.Name = "button_North";
+            this.button_North.Size = new System.Drawing.Size(45, 23);
+            this.button_North.TabIndex = 34;
+            this.button_North.Text = "N";
+            this.button_North.UseVisualStyleBackColor = true;
+            this.button_North.Click += new System.EventHandler(this.button_North_Click);
+            // 
+            // button_East
+            // 
+            this.button_East.Location = new System.Drawing.Point(604, 245);
+            this.button_East.Name = "button_East";
+            this.button_East.Size = new System.Drawing.Size(45, 23);
+            this.button_East.TabIndex = 35;
+            this.button_East.Text = "E";
+            this.button_East.UseVisualStyleBackColor = true;
+            this.button_East.Click += new System.EventHandler(this.button_East_Click);
+            // 
+            // button_South
+            // 
+            this.button_South.Location = new System.Drawing.Point(531, 283);
+            this.button_South.Name = "button_South";
+            this.button_South.Size = new System.Drawing.Size(45, 23);
+            this.button_South.TabIndex = 36;
+            this.button_South.Text = "S";
+            this.button_South.UseVisualStyleBackColor = true;
+            this.button_South.Click += new System.EventHandler(this.button_South_Click);
+            // 
+            // button_West
+            // 
+            this.button_West.Location = new System.Drawing.Point(458, 245);
+            this.button_West.Name = "button_West";
+            this.button_West.Size = new System.Drawing.Size(45, 23);
+            this.button_West.TabIndex = 37;
+            this.button_West.Text = "W";
+            this.button_West.UseVisualStyleBackColor = true;
+            this.button_West.Click += new System.EventHandler(this.button_West_Click);
+            // 
+            // button_NorthWest
+            // 
+            this.button_NorthWest.Location = new System.Drawing.Point(480, 216);
+            this.button_NorthWest.Name = "button_NorthWest";
+            this.button_NorthWest.Size = new System.Drawing.Size(45, 23);
+            this.button_NorthWest.TabIndex = 38;
+            this.button_NorthWest.Text = "NW";
+            this.button_NorthWest.UseVisualStyleBackColor = true;
+            this.button_NorthWest.Click += new System.EventHandler(this.button_NorthWest_Click);
+            // 
+            // button_NorthEast
+            // 
+            this.button_NorthEast.Location = new System.Drawing.Point(582, 216);
+            this.button_NorthEast.Name = "button_NorthEast";
+            this.button_NorthEast.Size = new System.Drawing.Size(45, 23);
+            this.button_NorthEast.TabIndex = 39;
+            this.button_NorthEast.Text = "NE";
+            this.button_NorthEast.UseVisualStyleBackColor = true;
+            this.button_NorthEast.Click += new System.EventHandler(this.button_NorthEast_Click);
+            // 
+            // button_SouthWest
+            // 
+            this.button_SouthWest.Location = new System.Drawing.Point(480, 274);
+            this.button_SouthWest.Name = "button_SouthWest";
+            this.button_SouthWest.Size = new System.Drawing.Size(45, 23);
+            this.button_SouthWest.TabIndex = 40;
+            this.button_SouthWest.Text = "SW";
+            this.button_SouthWest.UseVisualStyleBackColor = true;
+            this.button_SouthWest.Click += new System.EventHandler(this.button_SouthWest_Click);
+            // 
+            // button_SouthEast
+            // 
+            this.button_SouthEast.Location = new System.Drawing.Point(582, 274);
+            this.button_SouthEast.Name = "button_SouthEast";
+            this.button_SouthEast.Size = new System.Drawing.Size(45, 23);
+            this.button_SouthEast.TabIndex = 41;
+            this.button_SouthEast.Text = "SE";
+            this.button_SouthEast.UseVisualStyleBackColor = true;
+            this.button_SouthEast.Click += new System.EventHandler(this.button_SouthEast_Click);
+            // 
+            // checkBox_DemoDrive
+            // 
+            this.checkBox_DemoDrive.AutoSize = true;
+            this.checkBox_DemoDrive.Checked = true;
+            this.checkBox_DemoDrive.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox_DemoDrive.Location = new System.Drawing.Point(692, 249);
+            this.checkBox_DemoDrive.Name = "checkBox_DemoDrive";
+            this.checkBox_DemoDrive.Size = new System.Drawing.Size(80, 17);
+            this.checkBox_DemoDrive.TabIndex = 42;
+            this.checkBox_DemoDrive.Text = "Demo drive";
+            this.checkBox_DemoDrive.UseVisualStyleBackColor = true;
+            // 
+            // label18
+            // 
+            this.label18.AutoSize = true;
+            this.label18.Location = new System.Drawing.Point(477, 174);
+            this.label18.Name = "label18";
+            this.label18.Size = new System.Drawing.Size(52, 13);
+            this.label18.TabIndex = 43;
+            this.label18.Text = "Distance:";
+            // 
+            // label_distanceTraveled
+            // 
+            this.label_distanceTraveled.AutoSize = true;
+            this.label_distanceTraveled.Location = new System.Drawing.Point(541, 174);
+            this.label_distanceTraveled.Name = "label_distanceTraveled";
+            this.label_distanceTraveled.Size = new System.Drawing.Size(41, 13);
+            this.label_distanceTraveled.TabIndex = 44;
+            this.label_distanceTraveled.Text = "label19";
+            // 
+            // button_ResetDistance
+            // 
+            this.button_ResetDistance.Location = new System.Drawing.Point(692, 169);
+            this.button_ResetDistance.Name = "button_ResetDistance";
+            this.button_ResetDistance.Size = new System.Drawing.Size(75, 23);
+            this.button_ResetDistance.TabIndex = 45;
+            this.button_ResetDistance.Text = "Reset";
+            this.button_ResetDistance.UseVisualStyleBackColor = true;
+            this.button_ResetDistance.Click += new System.EventHandler(this.button_ResetDistance_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.button_ResetDistance);
+            this.Controls.Add(this.label_distanceTraveled);
+            this.Controls.Add(this.label18);
+            this.Controls.Add(this.checkBox_DemoDrive);
+            this.Controls.Add(this.button_SouthEast);
+            this.Controls.Add(this.button_SouthWest);
+            this.Controls.Add(this.button_NorthEast);
+            this.Controls.Add(this.button_NorthWest);
+            this.Controls.Add(this.button_West);
+            this.Controls.Add(this.button_South);
+            this.Controls.Add(this.button_East);
+            this.Controls.Add(this.button_North);
+            this.Controls.Add(this.label17);
+            this.Controls.Add(this.label16);
+            this.Controls.Add(this.label15);
+            this.Controls.Add(this.label14);
             this.Controls.Add(this.button_ZoomIn);
             this.Controls.Add(this.label_Zoom);
             this.Controls.Add(this.button_ZoomOut);
@@ -435,6 +623,22 @@ namespace GPSSimulator
         private System.Windows.Forms.Button button_ZoomOut;
         private System.Windows.Forms.Label label_Zoom;
         private System.Windows.Forms.Button button_ZoomIn;
+        private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Label label16;
+        private System.Windows.Forms.Label label17;
+        private System.Windows.Forms.Button button_North;
+        private System.Windows.Forms.Button button_East;
+        private System.Windows.Forms.Button button_South;
+        private System.Windows.Forms.Button button_West;
+        private System.Windows.Forms.Button button_NorthWest;
+        private System.Windows.Forms.Button button_NorthEast;
+        private System.Windows.Forms.Button button_SouthWest;
+        private System.Windows.Forms.Button button_SouthEast;
+        private System.Windows.Forms.CheckBox checkBox_DemoDrive;
+        private System.Windows.Forms.Label label18;
+        private System.Windows.Forms.Label label_distanceTraveled;
+        private System.Windows.Forms.Button button_ResetDistance;
     }
 }
 
