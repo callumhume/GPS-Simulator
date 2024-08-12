@@ -256,11 +256,11 @@ namespace GPSSimulator
                         {
                             if ((bearing > 180 ? bearing - 360 : bearing) < (targetBearing > 180 ? targetBearing - 360 : targetBearing) && (bearing > 180 ? bearing - 360 : bearing) + bearingChangePerUpdate > (targetBearing > 180 ? targetBearing - 360 : targetBearing))
                             { // Need to step right, but one step will overshoot.  Set to target.
-                                bearing = targetBearing;
+                                setBearing(targetBearing);
                             }
                             else
                             { // Normal update step to the right
-                                bearing = (bearing + bearingChangePerUpdate) % 360;
+                                setBearing(bearing + bearingChangePerUpdate);
                             }
                         }
                     }
@@ -270,11 +270,11 @@ namespace GPSSimulator
                         {
                             if (bearing < targetBearing && bearing + bearingChangePerUpdate > targetBearing)
                             { // Need to step right, but one step will overshoot.  Set to target.
-                                bearing = targetBearing;
+                                setBearing(targetBearing);
                             }
                             else
                             { // Normal update step to the right
-                                bearing = (bearing + bearingChangePerUpdate) % 360;
+                                setBearing(bearing + bearingChangePerUpdate);
                             }
                         }
                     }
@@ -288,11 +288,11 @@ namespace GPSSimulator
                         {
                             if ((bearing > 180 ? bearing - 360 : bearing) > (targetBearing > 180 ? targetBearing - 360 : targetBearing) && (bearing > 180 ? bearing - 360 : bearing) - bearingChangePerUpdate < (targetBearing > 180 ? targetBearing - 360 : targetBearing))
                             { // Need to step left, but one step will overshoot.  Set to target.
-                                bearing = targetBearing;
+                                setBearing(targetBearing);
                             }
                             else
                             { // Normal update step to the left
-                                bearing = (bearing - bearingChangePerUpdate) % 360;
+                                setBearing(bearing - bearingChangePerUpdate);
                             }
                         }
                     }
@@ -302,11 +302,11 @@ namespace GPSSimulator
                         {
                             if (bearing > targetBearing && bearing - bearingChangePerUpdate < targetBearing)
                             { // Need to step left, but one step will overshoot.  Set to target.
-                                bearing = targetBearing;
+                                setBearing(targetBearing);
                             }
                             else
                             { // Normal update step to the left
-                                bearing = (bearing - bearingChangePerUpdate) % 360;
+                                setBearing(bearing - bearingChangePerUpdate);
                             }
                         }
                     }
@@ -322,22 +322,22 @@ namespace GPSSimulator
                         { // Case need to turn right TODO: Verify C# functionality of % with negative numbers
                             if ((bearing > 180 ? bearing - 360 : bearing) > (targetBearing > 180 ? targetBearing - 360 : targetBearing) - bearingChangePerUpdate)
                             { // Case within one turning step of target.  Do not overshoot.
-                                bearing = targetBearing;
+                                setBearing(targetBearing);
                             }
                             else
                             { // Case outside one turning step, so make that step
-                                bearing = (bearing + bearingChangePerUpdate) % 360;
+                                setBearing(bearing + bearingChangePerUpdate);
                             }
                         }
                         else if ((bearing > 180 ? bearing - 360 : bearing) > (targetBearing > 180 ? targetBearing - 360 : targetBearing))
                         { // Case need to turn left
                             if ((bearing > 180 ? bearing - 360 : bearing) < (targetBearing > 180 ? targetBearing - 360 : targetBearing) + bearingChangePerUpdate)
                             { // Case within one turning step of target.  Do not overshoot.
-                                bearing = targetBearing; // TODO: turning left across north turns instantly...
+                                setBearing(targetBearing);
                             }
                             else
                             { // Case outside one turning step, so make that step.
-                                bearing = (bearing - bearingChangePerUpdate + 360) % 360;
+                                setBearing(bearing - bearingChangePerUpdate);
                             }
                         }
                     }
@@ -348,22 +348,22 @@ namespace GPSSimulator
                         { // Case need to turn right
                             if (bearing > targetBearing - bearingChangePerUpdate)
                             { // Case within one turning step of target.  Do not overshoot.
-                                bearing = targetBearing;
+                                setBearing(targetBearing);
                             }
                             else
                             { // Case outside one turning step, so make that step
-                                bearing += bearingChangePerUpdate;
+                                setBearing(bearing + bearingChangePerUpdate);
                             }
                         }
                         else if (bearing > targetBearing)
                         { // Case need to turn left
                             if (bearing < targetBearing + bearingChangePerUpdate)
                             { // Case within one turning step of target.  Do not overshoot.
-                                bearing = targetBearing;
+                                setBearing(targetBearing);
                             }
                             else
                             { // Case outside one turning step, so make that step.
-                                bearing -= bearingChangePerUpdate;
+                                setBearing(bearing - bearingChangePerUpdate);
                             }
                         }
                     }
@@ -390,6 +390,12 @@ namespace GPSSimulator
             latitudeOffset /= latitudeOffsetFactor[selectedProjection];
             longitude += longitudeOffset;
             latitude += latitudeOffset;
+        }
+
+        private void setBearing(double newBearing)
+        { //  Ensure bearing is always in the range [0, 360)
+            bearing = (newBearing + 360) % 360;
+            if (bearing == 360) bearing = 0;
         }
 
         private void populateUIElements()
