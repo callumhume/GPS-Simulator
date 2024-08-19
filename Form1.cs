@@ -26,12 +26,14 @@ namespace GPSSimulator
         bool drawTrail = true;
         int zoomLevel = 2; // Potential list: 10, 25, 50, 100, 250, 500, 1000
         // TODO: Start lat/long
-        int demoDriveType = 1; // 0 = spiral CW
+        int demoDriveType = 3; // 0 = spiral CW
                                // 1 = spiral CCW
                                // 2 = rows
+                               // 3 = octagon CW
+                               // 4 = octagon CCW
                                // TODO: enum
                                // TODO: UI selector
-        int turnMode = 1; // 0 = auto (nearest)
+        int turnMode = 0; // 0 = auto (nearest)
                           // 1 = CW / right turn
                           // 2 = CCW / left turn
                           // TODO: enum
@@ -120,6 +122,24 @@ namespace GPSSimulator
                             textBox_TargetBearing.Text = targetBearing.ToString();
                             updatesInThisDirection = 0;
                             maxSecondsThisDirection += selectedFixRate;
+                        }
+                        break;
+                    case 3: // Clockwise octagon
+                        maxSecondsThisDirection = 30;
+                        if (++updatesInThisDirection >= maxSecondsThisDirection * selectedFixRate)
+                        { // For testing purposes, turn 90 degrees to the left every x seconds
+                            targetBearing = (targetBearing + 45 + 360) % 360;
+                            textBox_TargetBearing.Text = targetBearing.ToString();
+                            updatesInThisDirection = 0;
+                        }
+                        break;
+                    case 4: // Counter-clockwise octagon
+                        maxSecondsThisDirection = 30;
+                        if (++updatesInThisDirection >= maxSecondsThisDirection * selectedFixRate)
+                        { // For testing purposes, turn 90 degrees to the right every x seconds
+                            targetBearing = (targetBearing - 45 + 360) % 360;
+                            textBox_TargetBearing.Text = targetBearing.ToString();
+                            updatesInThisDirection = 0;
                         }
                         break;
                     case 2: // Rows
