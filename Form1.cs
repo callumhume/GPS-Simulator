@@ -20,6 +20,7 @@ namespace GPSSimulator
         string selectedCOMPort = "COM1";
         int selectedBaudRate = 38400; // TODO: Enum?
         int selectedFixRate = 5; // TODO: Enum?
+        int selectedQuality = 1; // TODO: Enum?
         string newline = "\r\n";
         int selectedProjection = 0; // TODO: Enum?
         bool drawTrail = true;
@@ -139,15 +140,11 @@ namespace GPSSimulator
 
         private void outputGPSFix()
         {
-            // TODO: Create an actual GGA sentence
-            //serialPrintLine(DateTime.Now.TimeOfDay.ToString());
             TimeSpan fixTime = DateTime.Now.TimeOfDay;
             // GGA sentence structure:
             // $GPGGA,hhmmss.ss,ddmm.mm,a,ddmm.mm,a,x,xx,x.x,x.x,M,x.x,M,x.x,xxxx*hh
             // see https://logiqx.github.io/gps-wizard/nmea/messages/gga.html
-            // GGA tag
             // TODO: the rest of the GGA string
-            //       quality
             //       num sats
             //       HDOP
             //       Elevation (start user-configurable, use to compensate for surface speed vs coordinate speed!)
@@ -161,7 +158,7 @@ namespace GPSSimulator
                 fixTime.Hours, fixTime.Minutes, fixTime.Seconds, fixTime.Milliseconds / 10,
                 Math.Floor(Math.Abs(latitude)), (Math.Abs(latitude) - Math.Floor(Math.Abs(latitude))) * 60, latitude > 0 ? "N" : "S",
                 Math.Floor(Math.Abs(longitude)), (Math.Abs(longitude) - Math.Floor(Math.Abs(longitude))) * 60, longitude > 0 ? "E" : "W",
-                1,     // TODO: quality
+                selectedQuality, // Quality indicator (type of GPS fix)
                 12,    // TODO: satellites
                 1.0,   // TODO: HDOP (may need to change the formatting placeholder??
                 250.0, // TODO: Altitude
@@ -474,6 +471,26 @@ namespace GPSSimulator
             comboBox_ProjectionSelector.SelectedIndex = 1;
             comboBox_ProjectionSelector.Refresh();
 
+            string[] qualityOptions = { "Invalid",
+                                        "GPS",
+                                        "DGPS",
+                                        "Invalid",
+                                        "RTK-Fixed",
+                                        "RTK-Float",
+                                        "Dead-reckoning",
+                                        "Manual/fixed",
+                                        "Simulator",
+                                        "WAAS/SBAS"};
+
+            for (int i = 0; i < qualityOptions.Length; i++)
+            {
+                Console.WriteLine(qualityOptions[i].ToString());
+                comboBox_GPSQualitySelector.Items.Add(qualityOptions[i]);
+            }
+
+            comboBox_GPSQualitySelector.SelectedIndex = 1;
+            comboBox_GPSQualitySelector.Refresh();
+
             textBox_TargetSpeed.Text = targetSpeed.ToString();
             textBox_Accel.Text = acceleration.ToString();
             textBox_TargetBearing.Text = targetBearing.ToString();
@@ -588,8 +605,44 @@ namespace GPSSimulator
                     break;
             }
             Console.WriteLine("Selected projection: " + projection);
-
-            serialPrintLine("Test serial output on " + selectedCOMPort);
+            string quality = "";
+            switch (selectedQuality)
+            {
+                case 0:
+                    quality += "Invalid";
+                    break;
+                case 1:
+                    quality += "GPS";
+                    break;
+                case 2:
+                    quality += "DGPS";
+                    break;
+                case 3:
+                    quality += "Invalid";
+                    break;
+                case 4:
+                    quality += "RTK-Fixed";
+                    break;
+                case 5:
+                    quality += "RTK-Float";
+                    break;
+                case 6:
+                    quality += "Dead-reckoning";
+                    break;
+                case 7:
+                    quality += "Manual/fixed";
+                    break;
+                case 8:
+                    quality += "Simulator";
+                    break;
+                case 9:
+                    quality += "WAAS/SBAS";
+                    break;
+                default:
+                    quality = "Unknown";
+                    break;
+            }
+            Console.WriteLine("Selected quality:    " + quality);
         }
 
         private void comboBox_COMSelector_SelectedIndexChanged(object sender, EventArgs e)
@@ -694,6 +747,20 @@ namespace GPSSimulator
             printSettings();
         }
 
+        private void comboBox_GPSQualitySelector_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            selectedQuality = comboBox_GPSQualitySelector.SelectedIndex;
+
+            printSettings();
+        }
+
+        private void comboBox_GPSQualitySelector_TextUpdate(object sender, EventArgs e)
+        {
+            selectedQuality = comboBox_GPSQualitySelector.SelectedIndex;
+
+            printSettings();
+        }
+
         private void checkBox_drawTrail_CheckedChanged(object sender, EventArgs e)
         {
             drawTrail = checkBox_drawTrail.Checked;
@@ -736,14 +803,6 @@ namespace GPSSimulator
             {
                 targetBearing = double.Parse(textBox_TargetBearing.Text);
             }
-        }
-
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            // Clean up after ourselves!
-            gpsFixTimer.Stop();
-            serialPrintLine("Goodbye!");
-            serialPort1.Close();
         }
 
         private void button_ZoomIn_Click(object sender, EventArgs e)
@@ -816,6 +875,14 @@ namespace GPSSimulator
         {
             distanceTraveled = 0;
             label_distanceTraveled.Text = distanceTraveled.ToString("N3");
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // Clean up after ourselves!
+            gpsFixTimer.Stop();
+            serialPrintLine("Goodbye!");
+            serialPort1.Close();
         }
     }
 }
