@@ -427,7 +427,7 @@ namespace GPSSimulator
                 comboBox_COMSelector.Items.Add(COMPorts[i]);
             }
 
-            comboBox_COMSelector.SelectedIndex = 1;
+            comboBox_COMSelector.SelectedIndex = 0;
             comboBox_COMSelector.Refresh();
 
 
@@ -562,7 +562,7 @@ namespace GPSSimulator
         {
             chart1.Series.Add("Position");
             chart1.Series.FindByName("Position").ChartType = SeriesChartType.Point;
-            chart1.Series.FindByName("Position").MarkerSize *= 3; 
+            chart1.Series.FindByName("Position").MarkerSize *= 3;
             chart1.Series.FindByName("Position").ChartArea = "ChartArea1";
             chart1.Series.Add("Trail");
             chart1.Series.FindByName("Trail").ChartType = SeriesChartType.Line;
@@ -764,14 +764,14 @@ namespace GPSSimulator
 
         private void comboBox_NewlineSelector_SelectedIndexChanged(object sender, EventArgs e)
         {
-            switch(comboBox_NewlineSelector.SelectedIndex)
+            switch (comboBox_NewlineSelector.SelectedIndex)
             {
                 case 0: // CR
                     newline = "\r";
                     break;
                 case 1: // LF
                     newline = "\n";
-                    break; 
+                    break;
                 case 2: // CRLF
                 default:
                     newline = "\r\n";
