@@ -82,6 +82,9 @@ namespace GPSSimulator
             this.label14 = new System.Windows.Forms.Label();
             this.comboBox_TurnModeSelector = new System.Windows.Forms.ComboBox();
             this.label19 = new System.Windows.Forms.Label();
+            this.textBox_NumSatellites = new System.Windows.Forms.TextBox();
+            this.label20 = new System.Windows.Forms.Label();
+            this.label21 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -562,11 +565,41 @@ namespace GPSSimulator
             this.label19.TabIndex = 49;
             this.label19.Text = "Turn mode";
             // 
+            // textBox_NumSatellites
+            // 
+            this.textBox_NumSatellites.Location = new System.Drawing.Point(709, 122);
+            this.textBox_NumSatellites.Name = "textBox_NumSatellites";
+            this.textBox_NumSatellites.Size = new System.Drawing.Size(81, 20);
+            this.textBox_NumSatellites.TabIndex = 50;
+            this.textBox_NumSatellites.KeyPress += new System.Windows.Forms.KeyPressEventHandler(this.textBox_NumSatellites_KeyPress);
+            this.textBox_NumSatellites.Leave += new System.EventHandler(this.textBox_NumSatellites_Leave);
+            // 
+            // label20
+            // 
+            this.label20.AutoSize = true;
+            this.label20.Location = new System.Drawing.Point(654, 125);
+            this.label20.Name = "label20";
+            this.label20.Size = new System.Drawing.Size(49, 13);
+            this.label20.TabIndex = 51;
+            this.label20.Text = "Satellites";
+            // 
+            // label21
+            // 
+            this.label21.AutoSize = true;
+            this.label21.Location = new System.Drawing.Point(440, 333);
+            this.label21.Name = "label21";
+            this.label21.Size = new System.Drawing.Size(116, 13);
+            this.label21.TabIndex = 52;
+            this.label21.Text = "TODO: Input validation";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.label21);
+            this.Controls.Add(this.label20);
+            this.Controls.Add(this.textBox_NumSatellites);
             this.Controls.Add(this.label19);
             this.Controls.Add(this.comboBox_TurnModeSelector);
             this.Controls.Add(this.label14);
@@ -680,6 +713,9 @@ namespace GPSSimulator
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.ComboBox comboBox_TurnModeSelector;
         private System.Windows.Forms.Label label19;
+        private System.Windows.Forms.TextBox textBox_NumSatellites;
+        private System.Windows.Forms.Label label20;
+        private System.Windows.Forms.Label label21;
     }
 }
 

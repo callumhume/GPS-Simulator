@@ -39,6 +39,8 @@ namespace GPSSimulator
                           // TODO: enum
                           // TODO: UI selector
 
+        int numSatellites = 4;
+
         Timer gpsFixTimer;
         // User-settable
         double targetSpeed = 10.0; //  km/h // TODO: start/stop button that changes this target in the backend but leaves the original value visible to the user.  Selected target vs current target??
@@ -179,7 +181,7 @@ namespace GPSSimulator
                 Math.Floor(Math.Abs(latitude)), (Math.Abs(latitude) - Math.Floor(Math.Abs(latitude))) * 60, latitude > 0 ? "N" : "S",
                 Math.Floor(Math.Abs(longitude)), (Math.Abs(longitude) - Math.Floor(Math.Abs(longitude))) * 60, longitude > 0 ? "E" : "W",
                 selectedQuality, // Quality indicator (type of GPS fix)
-                12,    // TODO: satellites
+                numSatellites,   // satellites
                 1.0,   // TODO: HDOP (may need to change the formatting placeholder??
                 250.0, // TODO: Altitude
                 "M",   // Altitude units
@@ -190,7 +192,7 @@ namespace GPSSimulator
                 );
 
             formattedGGA = addChecksum(formattedGGA);
-            
+
 
             serialPrintLine(formattedGGA);
             // TODO: VTG
@@ -387,7 +389,7 @@ namespace GPSSimulator
                     break;
             }
 
-            
+
             // TODO: Account for rollover at 360/0
 
             // remember sin(90) = 1
@@ -947,6 +949,20 @@ namespace GPSSimulator
             gpsFixTimer.Stop();
             serialPrintLine("Goodbye!");
             serialPort1.Close();
+        }
+
+
+        private void textBox_NumSatellites_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (e.KeyChar.ToString().Contains("\r") || e.KeyChar.ToString().Contains("\n"))
+            {
+                numSatellites = int.Parse(textBox_NumSatellites.Text);
+            }
+        }
+
+        private void textBox_NumSatellites_Leave(object sender, EventArgs e)
+        { // TODO: parse check on all textboxes?  What if I enter letters?
+            numSatellites = int.Parse(textBox_NumSatellites.Text);
         }
     }
 }
