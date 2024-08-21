@@ -529,6 +529,7 @@ namespace GPSSimulator
             textBox_TargetSpeed.Text = targetSpeed.ToString();
             textBox_Accel.Text = acceleration.ToString();
             textBox_TargetBearing.Text = targetBearing.ToString();
+            textBox_NumSatellites.Text = numSatellites.ToString();
 
             label_Zoom.Text = getZoomLevelMeters(zoomLevel).ToString();
         }
