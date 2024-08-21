@@ -511,6 +511,19 @@ namespace GPSSimulator
             comboBox_GPSQualitySelector.SelectedIndex = 1;
             comboBox_GPSQualitySelector.Refresh();
 
+            string[] turnOptions = { "Nearest",
+                                     "Right only",
+                                     "Left only"};
+
+            for (int i = 0; i < turnOptions.Length; i++)
+            {
+                Console.WriteLine(turnOptions[i].ToString());
+                comboBox_TurnModeSelector.Items.Add(turnOptions[i]);
+            }
+
+            comboBox_TurnModeSelector.SelectedIndex = 0;
+            comboBox_TurnModeSelector.Refresh();
+
             textBox_TargetSpeed.Text = targetSpeed.ToString();
             textBox_Accel.Text = acceleration.ToString();
             textBox_TargetBearing.Text = targetBearing.ToString();
@@ -663,6 +676,23 @@ namespace GPSSimulator
                     break;
             }
             Console.WriteLine("Selected quality:    " + quality);
+            string turnModeString = "";
+            switch (turnMode)
+            {
+                case 0:
+                    turnModeString += "Nearest";
+                    break;
+                case 1:
+                    turnModeString += "Right";
+                    break;
+                case 2:
+                    turnModeString += "Left";
+                    break;
+                default:
+                    turnModeString = "Unknown";
+                    break;
+            }
+            Console.WriteLine("Selected turn mode:  " + turnModeString);
         }
 
         private void comboBox_COMSelector_SelectedIndexChanged(object sender, EventArgs e)
@@ -777,6 +807,20 @@ namespace GPSSimulator
         private void comboBox_GPSQualitySelector_TextUpdate(object sender, EventArgs e)
         {
             selectedQuality = comboBox_GPSQualitySelector.SelectedIndex;
+
+            printSettings();
+        }
+
+        private void comboBox_TurnModeSelector_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            turnMode = comboBox_TurnModeSelector.SelectedIndex;
+
+            printSettings();
+        }
+
+        private void comboBox_TurnModeSelector_TextUpdate(object sender, EventArgs e)
+        {
+            turnMode = comboBox_TurnModeSelector.SelectedIndex;
 
             printSettings();
         }

@@ -80,6 +80,8 @@ namespace GPSSimulator
             this.button_ResetDistance = new System.Windows.Forms.Button();
             this.comboBox_GPSQualitySelector = new System.Windows.Forms.ComboBox();
             this.label14 = new System.Windows.Forms.Label();
+            this.comboBox_TurnModeSelector = new System.Windows.Forms.ComboBox();
+            this.label19 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -541,11 +543,32 @@ namespace GPSSimulator
             this.label14.TabIndex = 47;
             this.label14.Text = "GPS type";
             // 
+            // comboBox_TurnModeSelector
+            // 
+            this.comboBox_TurnModeSelector.FormattingEnabled = true;
+            this.comboBox_TurnModeSelector.Location = new System.Drawing.Point(709, 94);
+            this.comboBox_TurnModeSelector.Name = "comboBox_TurnModeSelector";
+            this.comboBox_TurnModeSelector.Size = new System.Drawing.Size(81, 21);
+            this.comboBox_TurnModeSelector.TabIndex = 48;
+            this.comboBox_TurnModeSelector.SelectedIndexChanged += new System.EventHandler(this.comboBox_TurnModeSelector_SelectedIndexChanged);
+            this.comboBox_TurnModeSelector.TextUpdate += new System.EventHandler(this.comboBox_TurnModeSelector_TextUpdate);
+            // 
+            // label19
+            // 
+            this.label19.AutoSize = true;
+            this.label19.Location = new System.Drawing.Point(645, 97);
+            this.label19.Name = "label19";
+            this.label19.Size = new System.Drawing.Size(58, 13);
+            this.label19.TabIndex = 49;
+            this.label19.Text = "Turn mode";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.label19);
+            this.Controls.Add(this.comboBox_TurnModeSelector);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.comboBox_GPSQualitySelector);
             this.Controls.Add(this.button_ResetDistance);
@@ -655,6 +678,8 @@ namespace GPSSimulator
         private System.Windows.Forms.Button button_ResetDistance;
         private System.Windows.Forms.ComboBox comboBox_GPSQualitySelector;
         private System.Windows.Forms.Label label14;
+        private System.Windows.Forms.ComboBox comboBox_TurnModeSelector;
+        private System.Windows.Forms.Label label19;
     }
 }
 
