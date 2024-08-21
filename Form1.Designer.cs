@@ -85,13 +85,21 @@ namespace GPSSimulator
             this.textBox_NumSatellites = new System.Windows.Forms.TextBox();
             this.label20 = new System.Windows.Forms.Label();
             this.label21 = new System.Windows.Forms.Label();
+            this.menuStrip1 = new System.Windows.Forms.MenuStrip();
+            this.aboutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.nothingYetToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.versionToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.licensesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.contributingToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).BeginInit();
+            this.menuStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
             // comboBox_COMSelector
             // 
             this.comboBox_COMSelector.FormattingEnabled = true;
-            this.comboBox_COMSelector.Location = new System.Drawing.Point(71, 417);
+            this.comboBox_COMSelector.Location = new System.Drawing.Point(71, 441);
             this.comboBox_COMSelector.Name = "comboBox_COMSelector";
             this.comboBox_COMSelector.Size = new System.Drawing.Size(67, 21);
             this.comboBox_COMSelector.TabIndex = 0;
@@ -101,7 +109,7 @@ namespace GPSSimulator
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 420);
+            this.label1.Location = new System.Drawing.Point(12, 444);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(53, 13);
             this.label1.TabIndex = 1;
@@ -110,7 +118,7 @@ namespace GPSSimulator
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(144, 420);
+            this.label2.Location = new System.Drawing.Point(144, 444);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(58, 13);
             this.label2.TabIndex = 2;
@@ -119,7 +127,7 @@ namespace GPSSimulator
             // comboBox_BaudSelector
             // 
             this.comboBox_BaudSelector.FormattingEnabled = true;
-            this.comboBox_BaudSelector.Location = new System.Drawing.Point(208, 417);
+            this.comboBox_BaudSelector.Location = new System.Drawing.Point(208, 441);
             this.comboBox_BaudSelector.Name = "comboBox_BaudSelector";
             this.comboBox_BaudSelector.Size = new System.Drawing.Size(82, 21);
             this.comboBox_BaudSelector.TabIndex = 3;
@@ -129,7 +137,7 @@ namespace GPSSimulator
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(635, 43);
+            this.label3.Location = new System.Drawing.Point(635, 67);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(68, 13);
             this.label3.TabIndex = 4;
@@ -138,7 +146,7 @@ namespace GPSSimulator
             // comboBox_FixRateSelector
             // 
             this.comboBox_FixRateSelector.FormattingEnabled = true;
-            this.comboBox_FixRateSelector.Location = new System.Drawing.Point(709, 40);
+            this.comboBox_FixRateSelector.Location = new System.Drawing.Point(709, 64);
             this.comboBox_FixRateSelector.Name = "comboBox_FixRateSelector";
             this.comboBox_FixRateSelector.Size = new System.Drawing.Size(81, 21);
             this.comboBox_FixRateSelector.TabIndex = 5;
@@ -152,7 +160,7 @@ namespace GPSSimulator
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(300, 420);
+            this.label4.Location = new System.Drawing.Point(300, 444);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(45, 13);
             this.label4.TabIndex = 6;
@@ -161,7 +169,7 @@ namespace GPSSimulator
             // comboBox_NewlineSelector
             // 
             this.comboBox_NewlineSelector.FormattingEnabled = true;
-            this.comboBox_NewlineSelector.Location = new System.Drawing.Point(351, 417);
+            this.comboBox_NewlineSelector.Location = new System.Drawing.Point(351, 441);
             this.comboBox_NewlineSelector.Name = "comboBox_NewlineSelector";
             this.comboBox_NewlineSelector.Size = new System.Drawing.Size(65, 21);
             this.comboBox_NewlineSelector.TabIndex = 7;
@@ -172,7 +180,7 @@ namespace GPSSimulator
             // 
             chartArea1.Name = "ChartArea1";
             this.chart1.ChartAreas.Add(chartArea1);
-            this.chart1.Location = new System.Drawing.Point(13, 13);
+            this.chart1.Location = new System.Drawing.Point(13, 37);
             this.chart1.Name = "chart1";
             series1.ChartArea = "ChartArea1";
             series1.Legend = "Legend1";
@@ -185,7 +193,7 @@ namespace GPSSimulator
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(486, 13);
+            this.label5.Location = new System.Drawing.Point(486, 37);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(48, 13);
             this.label5.TabIndex = 9;
@@ -194,7 +202,7 @@ namespace GPSSimulator
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(477, 30);
+            this.label6.Location = new System.Drawing.Point(477, 54);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(57, 13);
             this.label6.TabIndex = 10;
@@ -203,7 +211,7 @@ namespace GPSSimulator
             // label_latitude
             // 
             this.label_latitude.AutoSize = true;
-            this.label_latitude.Location = new System.Drawing.Point(541, 13);
+            this.label_latitude.Location = new System.Drawing.Point(541, 37);
             this.label_latitude.Name = "label_latitude";
             this.label_latitude.Size = new System.Drawing.Size(35, 13);
             this.label_latitude.TabIndex = 11;
@@ -212,7 +220,7 @@ namespace GPSSimulator
             // label_longitude
             // 
             this.label_longitude.AutoSize = true;
-            this.label_longitude.Location = new System.Drawing.Point(541, 30);
+            this.label_longitude.Location = new System.Drawing.Point(541, 54);
             this.label_longitude.Name = "label_longitude";
             this.label_longitude.Size = new System.Drawing.Size(35, 13);
             this.label_longitude.TabIndex = 12;
@@ -220,7 +228,7 @@ namespace GPSSimulator
             // 
             // textBox_TargetSpeed
             // 
-            this.textBox_TargetSpeed.Location = new System.Drawing.Point(544, 47);
+            this.textBox_TargetSpeed.Location = new System.Drawing.Point(544, 71);
             this.textBox_TargetSpeed.Name = "textBox_TargetSpeed";
             this.textBox_TargetSpeed.Size = new System.Drawing.Size(49, 20);
             this.textBox_TargetSpeed.TabIndex = 13;
@@ -230,7 +238,7 @@ namespace GPSSimulator
             // label7
             // 
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(461, 50);
+            this.label7.Location = new System.Drawing.Point(461, 74);
             this.label7.Name = "label7";
             this.label7.Size = new System.Drawing.Size(73, 13);
             this.label7.TabIndex = 14;
@@ -239,7 +247,7 @@ namespace GPSSimulator
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(440, 349);
+            this.label8.Location = new System.Drawing.Point(440, 373);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(103, 13);
             this.label8.TabIndex = 15;
@@ -247,7 +255,7 @@ namespace GPSSimulator
             // 
             // textBox_Accel
             // 
-            this.textBox_Accel.Location = new System.Drawing.Point(544, 74);
+            this.textBox_Accel.Location = new System.Drawing.Point(544, 98);
             this.textBox_Accel.Name = "textBox_Accel";
             this.textBox_Accel.Size = new System.Drawing.Size(49, 20);
             this.textBox_Accel.TabIndex = 16;
@@ -257,7 +265,7 @@ namespace GPSSimulator
             // label9
             // 
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(465, 77);
+            this.label9.Location = new System.Drawing.Point(465, 101);
             this.label9.Name = "label9";
             this.label9.Size = new System.Drawing.Size(69, 13);
             this.label9.TabIndex = 17;
@@ -266,7 +274,7 @@ namespace GPSSimulator
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(490, 130);
+            this.label10.Location = new System.Drawing.Point(490, 154);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(41, 13);
             this.label10.TabIndex = 18;
@@ -275,7 +283,7 @@ namespace GPSSimulator
             // label_currentSpeed
             // 
             this.label_currentSpeed.AutoSize = true;
-            this.label_currentSpeed.Location = new System.Drawing.Point(541, 130);
+            this.label_currentSpeed.Location = new System.Drawing.Point(541, 154);
             this.label_currentSpeed.Name = "label_currentSpeed";
             this.label_currentSpeed.Size = new System.Drawing.Size(41, 13);
             this.label_currentSpeed.TabIndex = 19;
@@ -284,7 +292,7 @@ namespace GPSSimulator
             // label11
             // 
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(485, 152);
+            this.label11.Location = new System.Drawing.Point(485, 176);
             this.label11.Name = "label11";
             this.label11.Size = new System.Drawing.Size(46, 13);
             this.label11.TabIndex = 20;
@@ -293,7 +301,7 @@ namespace GPSSimulator
             // label_Bearing
             // 
             this.label_Bearing.AutoSize = true;
-            this.label_Bearing.Location = new System.Drawing.Point(541, 152);
+            this.label_Bearing.Location = new System.Drawing.Point(541, 176);
             this.label_Bearing.Name = "label_Bearing";
             this.label_Bearing.Size = new System.Drawing.Size(41, 13);
             this.label_Bearing.TabIndex = 21;
@@ -304,7 +312,7 @@ namespace GPSSimulator
             this.checkBox_drawTrail.AutoSize = true;
             this.checkBox_drawTrail.Checked = true;
             this.checkBox_drawTrail.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox_drawTrail.Location = new System.Drawing.Point(429, 420);
+            this.checkBox_drawTrail.Location = new System.Drawing.Point(429, 444);
             this.checkBox_drawTrail.Name = "checkBox_drawTrail";
             this.checkBox_drawTrail.Size = new System.Drawing.Size(74, 17);
             this.checkBox_drawTrail.TabIndex = 22;
@@ -315,7 +323,7 @@ namespace GPSSimulator
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(649, 16);
+            this.label12.Location = new System.Drawing.Point(649, 40);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(54, 13);
             this.label12.TabIndex = 23;
@@ -324,7 +332,7 @@ namespace GPSSimulator
             // comboBox_ProjectionSelector
             // 
             this.comboBox_ProjectionSelector.FormattingEnabled = true;
-            this.comboBox_ProjectionSelector.Location = new System.Drawing.Point(709, 13);
+            this.comboBox_ProjectionSelector.Location = new System.Drawing.Point(709, 37);
             this.comboBox_ProjectionSelector.Name = "comboBox_ProjectionSelector";
             this.comboBox_ProjectionSelector.Size = new System.Drawing.Size(81, 21);
             this.comboBox_ProjectionSelector.TabIndex = 24;
@@ -333,7 +341,7 @@ namespace GPSSimulator
             // 
             // textBox_TargetBearing
             // 
-            this.textBox_TargetBearing.Location = new System.Drawing.Point(544, 101);
+            this.textBox_TargetBearing.Location = new System.Drawing.Point(544, 125);
             this.textBox_TargetBearing.Name = "textBox_TargetBearing";
             this.textBox_TargetBearing.Size = new System.Drawing.Size(49, 20);
             this.textBox_TargetBearing.TabIndex = 25;
@@ -343,7 +351,7 @@ namespace GPSSimulator
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(455, 104);
+            this.label13.Location = new System.Drawing.Point(455, 128);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(79, 13);
             this.label13.TabIndex = 26;
@@ -383,7 +391,7 @@ namespace GPSSimulator
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(440, 365);
+            this.label15.Location = new System.Drawing.Point(440, 389);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(162, 13);
             this.label15.TabIndex = 31;
@@ -392,7 +400,7 @@ namespace GPSSimulator
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(440, 382);
+            this.label16.Location = new System.Drawing.Point(440, 406);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(102, 13);
             this.label16.TabIndex = 32;
@@ -401,7 +409,7 @@ namespace GPSSimulator
             // label17
             // 
             this.label17.AutoSize = true;
-            this.label17.Location = new System.Drawing.Point(440, 399);
+            this.label17.Location = new System.Drawing.Point(440, 423);
             this.label17.Name = "label17";
             this.label17.Size = new System.Drawing.Size(327, 13);
             this.label17.TabIndex = 33;
@@ -409,7 +417,7 @@ namespace GPSSimulator
             // 
             // button_North
             // 
-            this.button_North.Location = new System.Drawing.Point(531, 207);
+            this.button_North.Location = new System.Drawing.Point(531, 231);
             this.button_North.Name = "button_North";
             this.button_North.Size = new System.Drawing.Size(45, 23);
             this.button_North.TabIndex = 34;
@@ -419,7 +427,7 @@ namespace GPSSimulator
             // 
             // button_East
             // 
-            this.button_East.Location = new System.Drawing.Point(604, 245);
+            this.button_East.Location = new System.Drawing.Point(604, 269);
             this.button_East.Name = "button_East";
             this.button_East.Size = new System.Drawing.Size(45, 23);
             this.button_East.TabIndex = 35;
@@ -429,7 +437,7 @@ namespace GPSSimulator
             // 
             // button_South
             // 
-            this.button_South.Location = new System.Drawing.Point(531, 283);
+            this.button_South.Location = new System.Drawing.Point(531, 307);
             this.button_South.Name = "button_South";
             this.button_South.Size = new System.Drawing.Size(45, 23);
             this.button_South.TabIndex = 36;
@@ -439,7 +447,7 @@ namespace GPSSimulator
             // 
             // button_West
             // 
-            this.button_West.Location = new System.Drawing.Point(458, 245);
+            this.button_West.Location = new System.Drawing.Point(458, 269);
             this.button_West.Name = "button_West";
             this.button_West.Size = new System.Drawing.Size(45, 23);
             this.button_West.TabIndex = 37;
@@ -449,7 +457,7 @@ namespace GPSSimulator
             // 
             // button_NorthWest
             // 
-            this.button_NorthWest.Location = new System.Drawing.Point(480, 216);
+            this.button_NorthWest.Location = new System.Drawing.Point(480, 240);
             this.button_NorthWest.Name = "button_NorthWest";
             this.button_NorthWest.Size = new System.Drawing.Size(45, 23);
             this.button_NorthWest.TabIndex = 38;
@@ -459,7 +467,7 @@ namespace GPSSimulator
             // 
             // button_NorthEast
             // 
-            this.button_NorthEast.Location = new System.Drawing.Point(582, 216);
+            this.button_NorthEast.Location = new System.Drawing.Point(582, 240);
             this.button_NorthEast.Name = "button_NorthEast";
             this.button_NorthEast.Size = new System.Drawing.Size(45, 23);
             this.button_NorthEast.TabIndex = 39;
@@ -469,7 +477,7 @@ namespace GPSSimulator
             // 
             // button_SouthWest
             // 
-            this.button_SouthWest.Location = new System.Drawing.Point(480, 274);
+            this.button_SouthWest.Location = new System.Drawing.Point(480, 298);
             this.button_SouthWest.Name = "button_SouthWest";
             this.button_SouthWest.Size = new System.Drawing.Size(45, 23);
             this.button_SouthWest.TabIndex = 40;
@@ -479,7 +487,7 @@ namespace GPSSimulator
             // 
             // button_SouthEast
             // 
-            this.button_SouthEast.Location = new System.Drawing.Point(582, 274);
+            this.button_SouthEast.Location = new System.Drawing.Point(582, 298);
             this.button_SouthEast.Name = "button_SouthEast";
             this.button_SouthEast.Size = new System.Drawing.Size(45, 23);
             this.button_SouthEast.TabIndex = 41;
@@ -492,7 +500,7 @@ namespace GPSSimulator
             this.checkBox_DemoDrive.AutoSize = true;
             this.checkBox_DemoDrive.Checked = true;
             this.checkBox_DemoDrive.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox_DemoDrive.Location = new System.Drawing.Point(692, 249);
+            this.checkBox_DemoDrive.Location = new System.Drawing.Point(692, 273);
             this.checkBox_DemoDrive.Name = "checkBox_DemoDrive";
             this.checkBox_DemoDrive.Size = new System.Drawing.Size(80, 17);
             this.checkBox_DemoDrive.TabIndex = 42;
@@ -502,7 +510,7 @@ namespace GPSSimulator
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(477, 174);
+            this.label18.Location = new System.Drawing.Point(477, 198);
             this.label18.Name = "label18";
             this.label18.Size = new System.Drawing.Size(52, 13);
             this.label18.TabIndex = 43;
@@ -511,7 +519,7 @@ namespace GPSSimulator
             // label_distanceTraveled
             // 
             this.label_distanceTraveled.AutoSize = true;
-            this.label_distanceTraveled.Location = new System.Drawing.Point(541, 174);
+            this.label_distanceTraveled.Location = new System.Drawing.Point(541, 198);
             this.label_distanceTraveled.Name = "label_distanceTraveled";
             this.label_distanceTraveled.Size = new System.Drawing.Size(41, 13);
             this.label_distanceTraveled.TabIndex = 44;
@@ -519,7 +527,7 @@ namespace GPSSimulator
             // 
             // button_ResetDistance
             // 
-            this.button_ResetDistance.Location = new System.Drawing.Point(604, 169);
+            this.button_ResetDistance.Location = new System.Drawing.Point(604, 193);
             this.button_ResetDistance.Name = "button_ResetDistance";
             this.button_ResetDistance.Size = new System.Drawing.Size(75, 23);
             this.button_ResetDistance.TabIndex = 45;
@@ -530,7 +538,7 @@ namespace GPSSimulator
             // comboBox_GPSQualitySelector
             // 
             this.comboBox_GPSQualitySelector.FormattingEnabled = true;
-            this.comboBox_GPSQualitySelector.Location = new System.Drawing.Point(709, 67);
+            this.comboBox_GPSQualitySelector.Location = new System.Drawing.Point(709, 91);
             this.comboBox_GPSQualitySelector.Name = "comboBox_GPSQualitySelector";
             this.comboBox_GPSQualitySelector.Size = new System.Drawing.Size(81, 21);
             this.comboBox_GPSQualitySelector.TabIndex = 46;
@@ -540,7 +548,7 @@ namespace GPSSimulator
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(651, 70);
+            this.label14.Location = new System.Drawing.Point(651, 94);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(52, 13);
             this.label14.TabIndex = 47;
@@ -549,7 +557,7 @@ namespace GPSSimulator
             // comboBox_TurnModeSelector
             // 
             this.comboBox_TurnModeSelector.FormattingEnabled = true;
-            this.comboBox_TurnModeSelector.Location = new System.Drawing.Point(709, 94);
+            this.comboBox_TurnModeSelector.Location = new System.Drawing.Point(709, 118);
             this.comboBox_TurnModeSelector.Name = "comboBox_TurnModeSelector";
             this.comboBox_TurnModeSelector.Size = new System.Drawing.Size(81, 21);
             this.comboBox_TurnModeSelector.TabIndex = 48;
@@ -559,7 +567,7 @@ namespace GPSSimulator
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(645, 97);
+            this.label19.Location = new System.Drawing.Point(645, 121);
             this.label19.Name = "label19";
             this.label19.Size = new System.Drawing.Size(58, 13);
             this.label19.TabIndex = 49;
@@ -567,7 +575,7 @@ namespace GPSSimulator
             // 
             // textBox_NumSatellites
             // 
-            this.textBox_NumSatellites.Location = new System.Drawing.Point(709, 122);
+            this.textBox_NumSatellites.Location = new System.Drawing.Point(709, 146);
             this.textBox_NumSatellites.Name = "textBox_NumSatellites";
             this.textBox_NumSatellites.Size = new System.Drawing.Size(81, 20);
             this.textBox_NumSatellites.TabIndex = 50;
@@ -577,7 +585,7 @@ namespace GPSSimulator
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(654, 125);
+            this.label20.Location = new System.Drawing.Point(654, 149);
             this.label20.Name = "label20";
             this.label20.Size = new System.Drawing.Size(49, 13);
             this.label20.TabIndex = 51;
@@ -586,17 +594,74 @@ namespace GPSSimulator
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(440, 333);
+            this.label21.Location = new System.Drawing.Point(440, 357);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(116, 13);
             this.label21.TabIndex = 52;
             this.label21.Text = "TODO: Input validation";
             // 
+            // menuStrip1
+            // 
+            this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.fileToolStripMenuItem,
+            this.aboutToolStripMenuItem});
+            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
+            this.menuStrip1.Name = "menuStrip1";
+            this.menuStrip1.Size = new System.Drawing.Size(800, 24);
+            this.menuStrip1.TabIndex = 53;
+            this.menuStrip1.Text = "menuStrip1";
+            // 
+            // aboutToolStripMenuItem
+            // 
+            this.aboutToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.versionToolStripMenuItem,
+            this.licensesToolStripMenuItem,
+            this.contributingToolStripMenuItem});
+            this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
+            this.aboutToolStripMenuItem.Text = "About";
+            // 
+            // fileToolStripMenuItem
+            // 
+            this.fileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.nothingYetToolStripMenuItem});
+            this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
+            this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+            this.fileToolStripMenuItem.Text = "File";
+            // 
+            // nothingYetToolStripMenuItem
+            // 
+            this.nothingYetToolStripMenuItem.Enabled = false;
+            this.nothingYetToolStripMenuItem.Name = "nothingYetToolStripMenuItem";
+            this.nothingYetToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.nothingYetToolStripMenuItem.Text = "Nothing yet!";
+            // 
+            // versionToolStripMenuItem
+            // 
+            this.versionToolStripMenuItem.Name = "versionToolStripMenuItem";
+            this.versionToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.versionToolStripMenuItem.Text = "Changelog";
+            this.versionToolStripMenuItem.Click += new System.EventHandler(this.versionToolStripMenuItem_Click);
+            // 
+            // licensesToolStripMenuItem
+            // 
+            this.licensesToolStripMenuItem.Name = "licensesToolStripMenuItem";
+            this.licensesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.licensesToolStripMenuItem.Text = "Licenses";
+            this.licensesToolStripMenuItem.Click += new System.EventHandler(this.licensesToolStripMenuItem_Click);
+            // 
+            // contributingToolStripMenuItem
+            // 
+            this.contributingToolStripMenuItem.Name = "contributingToolStripMenuItem";
+            this.contributingToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.contributingToolStripMenuItem.Text = "Contributing";
+            this.contributingToolStripMenuItem.Click += new System.EventHandler(this.contributingToolStripMenuItem_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 450);
+            this.ClientSize = new System.Drawing.Size(800, 474);
             this.Controls.Add(this.label21);
             this.Controls.Add(this.label20);
             this.Controls.Add(this.textBox_NumSatellites);
@@ -649,13 +714,17 @@ namespace GPSSimulator
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.comboBox_COMSelector);
+            this.Controls.Add(this.menuStrip1);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
+            this.MainMenuStrip = this.menuStrip1;
             this.MaximizeBox = false;
             this.Name = "Form1";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "GPS Simulator";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.chart1)).EndInit();
+            this.menuStrip1.ResumeLayout(false);
+            this.menuStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -716,6 +785,13 @@ namespace GPSSimulator
         private System.Windows.Forms.TextBox textBox_NumSatellites;
         private System.Windows.Forms.Label label20;
         private System.Windows.Forms.Label label21;
+        private System.Windows.Forms.MenuStrip menuStrip1;
+        private System.Windows.Forms.ToolStripMenuItem fileToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem nothingYetToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem aboutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem versionToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem licensesToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem contributingToolStripMenuItem;
     }
 }
 

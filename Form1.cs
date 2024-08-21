@@ -979,5 +979,23 @@ namespace GPSSimulator
         { // TODO: parse check on all textboxes?  What if I enter letters?
             numSatellites = int.Parse(textBox_NumSatellites.Text);
         }
+
+        private void contributingToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            MessageBox.Show("https://github.com/callumhume/GPS-Simulator");
+        }
+
+        private void versionToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // TODO: Better changelog stuff?  Formatting???
+            MessageBox.Show("0.1.0: Inital testing/demo release", "GPS Simulator Changelog");
+        }
+
+        private void licensesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // TODO: Better licensing stuff?  Formatting???
+            MessageBox.Show("GPS Simulator is tentatively written under the GPLv3 (https://www.gnu.org/licenses/gpl-3.0.en.html).\n\n" +
+                "At some point before full release, the project will likely be moved to one of the Fair Source licenses (https://fair.io/licenses/).", "GPS Simulator License");
+        }
     }
 }
