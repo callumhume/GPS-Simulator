@@ -700,20 +700,34 @@ namespace GPSSimulator
 
         private void comboBox_COMSelector_SelectedIndexChanged(object sender, EventArgs e)
         {
-            selectedCOMPort = comboBox_COMSelector.SelectedItem.ToString();
-            if (serialPort1.IsOpen) serialPort1.Close();
-            serialPort1.PortName = selectedCOMPort;
-            serialPort1.Open();
-            printSettings();
+            try
+            {
+                selectedCOMPort = comboBox_COMSelector.SelectedItem.ToString();
+                if (serialPort1.IsOpen) serialPort1.Close();
+                serialPort1.PortName = selectedCOMPort;
+                serialPort1.Open();
+                printSettings();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         private void comboBox_COMSelector_TextUpdate(object sender, EventArgs e)
         {
-            selectedCOMPort = comboBox_COMSelector.Text;
-            if (serialPort1.IsOpen) serialPort1.Close();
-            serialPort1.PortName = selectedCOMPort;
-            serialPort1.Open();
-            printSettings();
+            try
+            {
+                selectedCOMPort = comboBox_COMSelector.Text;
+                if (serialPort1.IsOpen) serialPort1.Close();
+                serialPort1.PortName = selectedCOMPort;
+                serialPort1.Open();
+                printSettings();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+            }
         }
 
         private void comboBox_BaudSelector_SelectedIndexChanged(object sender, EventArgs e)
