@@ -28,7 +28,9 @@ This project is a shameless recreation / improvement upon the GPS simulator crea
 - Field boundaries,
 - Hotkeys for manual driving,
 - Quick stop/go/turn buttons, separate from cardinal direction buttons,
-- VTG sentence output
+- VTG sentence output,
+- Dynamic wheel slip to simulate lost traction in field,
+- GPS drift
 
 ### License
 
