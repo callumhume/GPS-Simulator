@@ -994,8 +994,9 @@ namespace GPSSimulator
         private void licensesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             // TODO: Better licensing stuff?  Formatting???
-            MessageBox.Show("GPS Simulator is tentatively written under the GPLv3 (https://www.gnu.org/licenses/gpl-3.0.en.html).\n\n" +
-                "At some point before full release, the project will likely be moved to one of the Fair Source licenses (https://fair.io/licenses/).", "GPS Simulator License");
+            MessageBox.Show("GPS Simulator is tentatively written under the GPLv3 (https://www.gnu.org/licenses/gpl-3.0.en.html).\n" +
+                "\n" +
+                "At some point before full release, the project will likely be moved to one of the Fair Source licenses (https://fair.io/licenses/)", "GPS Simulator Licenses");
         }
     }
 }
