@@ -448,7 +448,7 @@ namespace GPSSimulator
                 comboBox_BaudSelector.Items.Add(baudRates[i]);
             }
 
-            comboBox_BaudSelector.SelectedIndex = 3;
+            comboBox_BaudSelector.SelectedIndex = 2;
             comboBox_BaudSelector.Refresh();
 
 
@@ -504,7 +504,7 @@ namespace GPSSimulator
                 comboBox_GPSQualitySelector.Items.Add(qualityOptions[i]);
             }
 
-            comboBox_GPSQualitySelector.SelectedIndex = 1;
+            comboBox_GPSQualitySelector.SelectedIndex = 2;
             comboBox_GPSQualitySelector.Refresh();
 
             string[] turnOptions = { "Nearest",
