@@ -64,6 +64,9 @@ namespace GPSSimulator
             111131.745,     // Plane - equatorial flat earth scale
             78846.805       // WGS-84 @ 45deg north // TODO: Compensate long based on lat
             };
+
+        double maxSpeed = 50.0; // TODO: lots of these maxes and cosntants should be pulled into a separate file for organizational reasons.
+
         double speed = 0.0;
         double bearing = 45.0;
         double distanceTraveled = 0.0;
@@ -857,6 +860,11 @@ namespace GPSSimulator
         private void textBox_TargetSpeed_Leave(object sender, EventArgs e)
         {
             targetSpeed = double.Parse(textBox_TargetSpeed.Text);
+            if (targetSpeed > maxSpeed)
+            {
+                targetSpeed = maxSpeed;
+                textBox_TargetSpeed.Text = targetSpeed.ToString("N4");
+            }
         }
 
         private void textBox_TargetSpeed_KeyPress(object sender, KeyPressEventArgs e)
@@ -864,6 +872,11 @@ namespace GPSSimulator
             if (e.KeyChar.ToString().Contains("\r") || e.KeyChar.ToString().Contains("\n"))
             {
                 targetSpeed = double.Parse(textBox_TargetSpeed.Text);
+                if (targetSpeed > maxSpeed)
+                {
+                    targetSpeed = maxSpeed;
+                    textBox_TargetSpeed.Text = targetSpeed.ToString("N4");
+                }
             }
         }
 
