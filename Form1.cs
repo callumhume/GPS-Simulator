@@ -24,7 +24,7 @@ namespace GPSSimulator
         string newline = "\r\n";
         int selectedProjection = 0; // TODO: Enum?
         bool drawTrail = true;
-        int zoomLevel = 2; // Potential list: 10, 25, 50, 100, 250, 500, 1000
+        int zoomLevel = 5; // Potential list: 10, 25, 50, 100, 250, 500, 1000 TODO: Extend the list so we can watch from space
         // TODO: Start lat/long
         int demoDriveType = 3; // 0 = spiral CW
                                // 1 = spiral CCW
