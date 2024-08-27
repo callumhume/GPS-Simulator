@@ -64,7 +64,6 @@ namespace GPSSimulator
             this.button_ZoomOut = new System.Windows.Forms.Button();
             this.label_Zoom = new System.Windows.Forms.Label();
             this.button_ZoomIn = new System.Windows.Forms.Button();
-            this.label15 = new System.Windows.Forms.Label();
             this.label16 = new System.Windows.Forms.Label();
             this.label17 = new System.Windows.Forms.Label();
             this.button_North = new System.Windows.Forms.Button();
@@ -248,7 +247,7 @@ namespace GPSSimulator
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(440, 373);
+            this.label8.Location = new System.Drawing.Point(440, 391);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(103, 13);
             this.label8.TabIndex = 15;
@@ -388,15 +387,6 @@ namespace GPSSimulator
             this.button_ZoomIn.Text = "Zoom in";
             this.button_ZoomIn.UseVisualStyleBackColor = true;
             this.button_ZoomIn.Click += new System.EventHandler(this.button_ZoomIn_Click);
-            // 
-            // label15
-            // 
-            this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(440, 389);
-            this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(162, 13);
-            this.label15.TabIndex = 31;
-            this.label15.Text = "TODO: Turn right, left, or nearest";
             // 
             // label16
             // 
@@ -595,7 +585,7 @@ namespace GPSSimulator
             // label21
             // 
             this.label21.AutoSize = true;
-            this.label21.Location = new System.Drawing.Point(440, 357);
+            this.label21.Location = new System.Drawing.Point(440, 375);
             this.label21.Name = "label21";
             this.label21.Size = new System.Drawing.Size(116, 13);
             this.label21.TabIndex = 52;
@@ -684,7 +674,6 @@ namespace GPSSimulator
             this.Controls.Add(this.button_North);
             this.Controls.Add(this.label17);
             this.Controls.Add(this.label16);
-            this.Controls.Add(this.label15);
             this.Controls.Add(this.button_ZoomIn);
             this.Controls.Add(this.label_Zoom);
             this.Controls.Add(this.button_ZoomOut);
@@ -765,7 +754,6 @@ namespace GPSSimulator
         private System.Windows.Forms.Button button_ZoomOut;
         private System.Windows.Forms.Label label_Zoom;
         private System.Windows.Forms.Button button_ZoomIn;
-        private System.Windows.Forms.Label label15;
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label17;
         private System.Windows.Forms.Button button_North;
