@@ -37,7 +37,6 @@ namespace GPSSimulator
                           // 1 = CW / right turn
                           // 2 = CCW / left turn
                           // TODO: enum
-                          // TODO: UI selector
 
         int numSatellites = 4;
 
@@ -87,8 +86,6 @@ namespace GPSSimulator
             // TODO: Select previous settings
 
             // TODO: Create GPS logic
-
-            // TODO: Create output logic (autoconnect at beginning)
 
             gpsFixTimer.Start();
 
@@ -389,22 +386,16 @@ namespace GPSSimulator
                     break;
             }
 
-
-            // TODO: Account for rollover at 360/0
-
             // remember sin(90) = 1
             // cos (0) = 1
             // cos gives x component, sin gives y component
-            // TODO: Degrees or radians?
             double bearingRadians = Math.PI * bearing / 180.0;
-            //double longitudeFactor = Math.Cos(bearingRadians);
-            //double latitudeFactor = Math.Sin(bearingRadians);
-            // With needing to mirror bearing around the line x = y, why don't I just switch which component is used where?
+            // Because we want 0 degrees north increasing clockwise instead of the typical mathematical 0 degrees west increasing counter clockwise, we can just mirror the line x = y
             double latitudeFactor = Math.Cos(bearingRadians);
             double longitudeFactor = Math.Sin(bearingRadians);
             double longitudeOffset = deltaPosition * longitudeFactor;
             double latitudeOffset = deltaPosition * latitudeFactor;
-            // TODO: Latitude compensation.  Currently completely flat-earthing
+            // TODO: Projection compensation at other latitudes
             longitudeOffset /= longitudeOffsetFactor[selectedProjection];
             latitudeOffset /= latitudeOffsetFactor[selectedProjection];
             longitude += longitudeOffset;
@@ -599,10 +590,7 @@ namespace GPSSimulator
             {
                 serialPort1.Write(output);
             }
-            else
-            {
-                throw new Exception("Serial port must be opened to write to it!");
-            }
+            // Else do nothing, so we don't crash if we cselect the wrong com port!
         }
 
         private void serialPrintLine(string output)
@@ -612,10 +600,7 @@ namespace GPSSimulator
                 serialPort1.Write(output);
                 serialPort1.Write(newline);
             }
-            else
-            {
-                throw new Exception("Serial port must be opened to write to it!");
-            }
+            // Else do nothing, so we don't crash if we cselect the wrong com port!
         }
 
         private void printSettings()
@@ -711,6 +696,8 @@ namespace GPSSimulator
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                serialPort1.Close();
+                MessageBox.Show(ex.Message, "COM Port error!");
             }
         }
 
@@ -727,6 +714,8 @@ namespace GPSSimulator
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
+                serialPort1.Close();
+                MessageBox.Show(ex.Message, "COM Port error!");
             }
         }
 
