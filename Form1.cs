@@ -721,20 +721,38 @@ namespace GPSSimulator
 
         private void comboBox_BaudSelector_SelectedIndexChanged(object sender, EventArgs e)
         {
-            selectedBaudRate = int.Parse(comboBox_BaudSelector.SelectedItem.ToString());
-            if (serialPort1.IsOpen) serialPort1.Close();
-            serialPort1.BaudRate = selectedBaudRate;
-            serialPort1.Open();
-            printSettings();
+            try
+            {
+                selectedBaudRate = int.Parse(comboBox_BaudSelector.SelectedItem.ToString());
+                if (serialPort1.IsOpen) serialPort1.Close();
+                serialPort1.BaudRate = selectedBaudRate;
+                serialPort1.Open();
+                printSettings();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                serialPort1.Close();
+                MessageBox.Show(ex.Message, "COM Port error!");
+            }
         }
 
         private void comboBox_BaudSelector_TextUpdate(object sender, EventArgs e)
         {
-            selectedBaudRate = int.Parse(comboBox_BaudSelector.SelectedItem.ToString());
-            if (serialPort1.IsOpen) serialPort1.Close();
-            serialPort1.BaudRate = selectedBaudRate;
-            serialPort1.Open();
-            printSettings();
+            try
+            {
+                selectedBaudRate = int.Parse(comboBox_BaudSelector.SelectedItem.ToString());
+                if (serialPort1.IsOpen) serialPort1.Close();
+                serialPort1.BaudRate = selectedBaudRate;
+                serialPort1.Open();
+                printSettings();
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                serialPort1.Close();
+                MessageBox.Show(ex.Message, "COM Port error!");
+            }
         }
 
         private void comboBox_FixRateSelector_SelectedIndexChanged(object sender, EventArgs e)
