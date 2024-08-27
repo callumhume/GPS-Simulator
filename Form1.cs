@@ -1007,8 +1007,9 @@ namespace GPSSimulator
 
         private void versionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // TODO: Better changelog stuff?  Formatting???
-            MessageBox.Show("0.1.0: Inital testing/demo release", "GPS Simulator Changelog");
+            // TODO: Better changelog stuff?  Formatting???  Automatgic from github?
+            MessageBox.Show("0.1.1: Fixes COM port bugs and adds max speed\n" +
+                "0.1.0: Inital testing/demo release", "GPS Simulator Changelog");
         }
 
         private void licensesToolStripMenuItem_Click(object sender, EventArgs e)
