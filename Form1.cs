@@ -17,14 +17,6 @@ namespace GPSSimulator
     public partial class Form1 : Form
     {
         // User-settable, should be saved
-        string selectedCOMPort = "COM1";
-        int selectedBaudRate = 38400; // TODO: Enum?
-        int selectedFixRate = 5; // TODO: Enum?
-        int selectedQuality = 1; // TODO: Enum?
-        string newline = "\r\n";
-        int selectedProjection = 0; // TODO: Enum?
-        bool drawTrail = true;
-        int zoomLevel = 5; // Potential list: 10, 25, 50, 100, 250, 500, 1000 TODO: Extend the list so we can watch from space
         // TODO: Start lat/long
         int demoDriveType = 3; // 0 = spiral CW
                                // 1 = spiral CCW
@@ -33,15 +25,9 @@ namespace GPSSimulator
                                // 4 = octagon CCW
                                // TODO: enum
                                // TODO: UI selector
-        int turnMode = 0; // 0 = auto (nearest)
-                          // 1 = CW / right turn
-                          // 2 = CCW / left turn
-                          // TODO: enum
-
-        int numSatellites = 4;
 
         Timer gpsFixTimer;
-        // User-settable
+        // User-settable, not persistent
         double targetSpeed = 10.0; //  km/h // TODO: start/stop button that changes this target in the backend but leaves the original value visible to the user.  Selected target vs current target??
         double targetBearing = 45.0;
         double acceleration = 0.5; // km/h/sec
@@ -77,7 +63,7 @@ namespace GPSSimulator
         {
             InitializeComponent();
             gpsFixTimer = new Timer();
-            gpsFixTimer.Interval = 1000 / selectedFixRate;
+            gpsFixTimer.Interval = 1000 / Properties.Settings.Default.selectedFixRate;
             gpsFixTimer.Tick += new EventHandler(handleGPSCalculations);
 
             populateUIElements();
@@ -109,26 +95,26 @@ namespace GPSSimulator
                 switch (demoDriveType)
                 {
                     case 0: // Clockwise spiral
-                        if (++updatesInThisDirection >= maxSecondsThisDirection * selectedFixRate)
+                        if (++updatesInThisDirection >= maxSecondsThisDirection * Properties.Settings.Default.selectedFixRate)
                         { // For testing purposes, turn 90 degrees to the left every x seconds
                             targetBearing = (targetBearing + 45 + 360) % 360;
                             textBox_TargetBearing.Text = targetBearing.ToString();
                             updatesInThisDirection = 0;
-                            maxSecondsThisDirection += selectedFixRate;
+                            maxSecondsThisDirection += Properties.Settings.Default.selectedFixRate;
                         }
                         break;
                     case 1: // Counter-clockwise spiral
-                        if (++updatesInThisDirection >= maxSecondsThisDirection * selectedFixRate)
+                        if (++updatesInThisDirection >= maxSecondsThisDirection * Properties.Settings.Default.selectedFixRate)
                         { // For testing purposes, turn 90 degrees to the right every x seconds
                             targetBearing = (targetBearing - 45 + 360) % 360;
                             textBox_TargetBearing.Text = targetBearing.ToString();
                             updatesInThisDirection = 0;
-                            maxSecondsThisDirection += selectedFixRate;
+                            maxSecondsThisDirection += Properties.Settings.Default.selectedFixRate;
                         }
                         break;
                     case 3: // Clockwise octagon
                         maxSecondsThisDirection = 30;
-                        if (++updatesInThisDirection >= maxSecondsThisDirection * selectedFixRate)
+                        if (++updatesInThisDirection >= maxSecondsThisDirection * Properties.Settings.Default.selectedFixRate)
                         { // For testing purposes, turn 90 degrees to the left every x seconds
                             targetBearing = (targetBearing + 45 + 360) % 360;
                             textBox_TargetBearing.Text = targetBearing.ToString();
@@ -137,7 +123,7 @@ namespace GPSSimulator
                         break;
                     case 4: // Counter-clockwise octagon
                         maxSecondsThisDirection = 30;
-                        if (++updatesInThisDirection >= maxSecondsThisDirection * selectedFixRate)
+                        if (++updatesInThisDirection >= maxSecondsThisDirection * Properties.Settings.Default.selectedFixRate)
                         { // For testing purposes, turn 90 degrees to the right every x seconds
                             targetBearing = (targetBearing - 45 + 360) % 360;
                             textBox_TargetBearing.Text = targetBearing.ToString();
@@ -147,12 +133,12 @@ namespace GPSSimulator
                     case 2: // Rows
                     default:
                         // TODO: Fixed number of updates?
-                        if (++updatesInThisDirection >= maxSecondsThisDirection * selectedFixRate)
+                        if (++updatesInThisDirection >= maxSecondsThisDirection * Properties.Settings.Default.selectedFixRate)
                         { // For testing purposes, turn 180 degrees every x seconds
                             targetBearing = (targetBearing + 180 + 360) % 360;
                             textBox_TargetBearing.Text = targetBearing.ToString();
                             updatesInThisDirection = 0;
-                            maxSecondsThisDirection += selectedFixRate;
+                            maxSecondsThisDirection += Properties.Settings.Default.selectedFixRate;
                         }
                         break;
                 }
@@ -180,8 +166,8 @@ namespace GPSSimulator
                 fixTime.Hours, fixTime.Minutes, fixTime.Seconds, fixTime.Milliseconds / 10,
                 Math.Floor(Math.Abs(latitude)), (Math.Abs(latitude) - Math.Floor(Math.Abs(latitude))) * 60, latitude > 0 ? "N" : "S",
                 Math.Floor(Math.Abs(longitude)), (Math.Abs(longitude) - Math.Floor(Math.Abs(longitude))) * 60, longitude > 0 ? "E" : "W",
-                selectedQuality, // Quality indicator (type of GPS fix)
-                numSatellites,   // satellites
+                Properties.Settings.Default.selectedQualityIndicator, // Quality indicator (type of GPS fix)
+                Properties.Settings.Default.selectedNumSatellites,   // satellites
                 1.0,   // TODO: HDOP (may need to change the formatting placeholder??
                 250.0, // TODO: Altitude
                 "M",   // Altitude units
@@ -213,9 +199,9 @@ namespace GPSSimulator
 
         private void calculateNextGPSFix()
         {
-            double deltaTime = 1000.0 / selectedFixRate; // Ideal time, not looking at clock drift forward/backward or taking actual uptime if this task gets fired slightly earlier/later
+            double deltaTime = 1000.0 / Properties.Settings.Default.selectedFixRate; // Ideal time, not looking at clock drift forward/backward or taking actual uptime if this task gets fired slightly earlier/later
             //serialPrintLine(deltaTime.ToString());
-            double accelerationPerUpdate = acceleration / selectedFixRate;
+            double accelerationPerUpdate = acceleration / Properties.Settings.Default.selectedFixRate;
             // Update speed as needed.  We're not trying to make a physics simulator here so we only care about acceleration steps.  No jerk or rice krispies here...
             if (speed < targetSpeed)
             { // Case need to speed up
@@ -247,7 +233,7 @@ namespace GPSSimulator
             // / 60  (m/sec)
             // / 1000 (m/msec)
             // ^ deltaTime (m/update)
-            double deltaPosition = speed * 1000.0 / 60.0 / 60.0 / selectedFixRate; // Convert km/hr to m/update
+            double deltaPosition = speed * 1000.0 / 60.0 / 60.0 / Properties.Settings.Default.selectedFixRate; // Convert km/hr to m/update
             distanceTraveled += deltaPosition / 1000; // Track distance in km
             label_distanceTraveled.Text = distanceTraveled.ToString("N3");
             //serialPrintLine(accelerationPerUpdate.ToString());
@@ -260,11 +246,11 @@ namespace GPSSimulator
 
             // TODO: When implementing right/left turn options, this might get taken care of.  But a graceful/predictable implementation for "turn 180 degrees"
 
-            double bearingChangePerUpdate = turningRate / selectedFixRate;
+            double bearingChangePerUpdate = turningRate / Properties.Settings.Default.selectedFixRate;
             // If bearing is between 270 and 90, switch systems to -180 to +180 to account for rollover.  Then output results in 0-360
             // Update bearing as needed.  Same logic as speed updates but we'll need a wraparound at 0/360
 
-            switch (turnMode)
+            switch (Properties.Settings.Default.selectedTurnMode)
             {
                 case 1:
                     // Clockwise (right) turns only
@@ -399,8 +385,8 @@ namespace GPSSimulator
             double longitudeOffset = deltaPosition * longitudeFactor;
             double latitudeOffset = deltaPosition * latitudeFactor;
             // TODO: Projection compensation at other latitudes
-            longitudeOffset /= longitudeOffsetFactor[selectedProjection];
-            latitudeOffset /= latitudeOffsetFactor[selectedProjection];
+            longitudeOffset /= longitudeOffsetFactor[Properties.Settings.Default.selectedProjection];
+            latitudeOffset /= latitudeOffsetFactor[Properties.Settings.Default.selectedProjection];
             longitude += longitudeOffset;
             latitude += latitudeOffset;
         }
@@ -421,8 +407,16 @@ namespace GPSSimulator
                 comboBox_COMSelector.Items.Add(COMPorts[i]);
             }
 
-            comboBox_COMSelector.SelectedIndex = 0;
-            comboBox_COMSelector.Refresh();
+            if (comboBox_COMSelector.Items.Contains(Properties.Settings.Default.selectedCOMPort))
+            {
+                Console.WriteLine("COM port " + Properties.Settings.Default.selectedCOMPort + " is in the list");
+                comboBox_COMSelector.SelectedIndex = comboBox_COMSelector.Items.IndexOf(Properties.Settings.Default.selectedCOMPort);
+            }
+            else
+            {
+                Console.WriteLine("COM port " + Properties.Settings.Default.selectedCOMPort + " is NOT in the list");
+                comboBox_COMSelector.SelectedIndex = 0;
+            }
 
 
             int[] baudRates = { //110,
@@ -448,8 +442,16 @@ namespace GPSSimulator
                 comboBox_BaudSelector.Items.Add(baudRates[i]);
             }
 
-            comboBox_BaudSelector.SelectedIndex = 2;
-            comboBox_BaudSelector.Refresh();
+            if (comboBox_BaudSelector.Items.Contains(Properties.Settings.Default.selectedBaudRate))
+            {
+                Console.WriteLine("Baud rate " + Properties.Settings.Default.selectedBaudRate + " is in the list");
+                comboBox_BaudSelector.SelectedIndex = comboBox_BaudSelector.Items.IndexOf(Properties.Settings.Default.selectedBaudRate);
+            }
+            else
+            {
+                Console.WriteLine("Baud rate " + Properties.Settings.Default.selectedBaudRate + " is NOT in the list");
+                comboBox_BaudSelector.SelectedIndex = 2;
+            }
 
 
             int[] fixRates = { 1, 2, 4, 5, 10, 20 };
@@ -460,8 +462,16 @@ namespace GPSSimulator
                 comboBox_FixRateSelector.Items.Add(fixRates[i]);
             }
 
-            comboBox_FixRateSelector.SelectedIndex = 3;
-            comboBox_FixRateSelector.Refresh();
+            if (comboBox_FixRateSelector.Items.Contains(Properties.Settings.Default.selectedFixRate))
+            {
+                Console.WriteLine("Fix rate " + Properties.Settings.Default.selectedFixRate + " is in the list");
+                comboBox_FixRateSelector.SelectedIndex = comboBox_FixRateSelector.Items.IndexOf(Properties.Settings.Default.selectedFixRate);
+            }
+            else
+            {
+                Console.WriteLine("Fix rate " + Properties.Settings.Default.selectedFixRate + " is NOT in the list");
+                comboBox_FixRateSelector.SelectedIndex = 3;
+            }
 
 
             string[] newlineOptions = { "CR", "LF", "CRLF" };
@@ -472,8 +482,21 @@ namespace GPSSimulator
                 comboBox_NewlineSelector.Items.Add(newlineOptions[i]);
             }
 
-            comboBox_NewlineSelector.SelectedIndex = 2;
-            comboBox_NewlineSelector.Refresh();
+
+            string newlinerepresentation = "";
+            if (Properties.Settings.Default.selectedNewline.Contains("\r")) newlinerepresentation += "CR";
+            if (Properties.Settings.Default.selectedNewline.Contains("\n")) newlinerepresentation += "LF";
+
+            if (comboBox_NewlineSelector.Items.Contains(newlinerepresentation))
+            {
+                Console.WriteLine("Newline sequence " + newlinerepresentation + " is in the list");
+                comboBox_NewlineSelector.SelectedIndex = comboBox_NewlineSelector.Items.IndexOf(newlinerepresentation);
+            }
+            else
+            {
+                Console.WriteLine("Newline sequence " + newlinerepresentation + " is NOT in the list");
+                comboBox_NewlineSelector.SelectedIndex = 2;
+            }
 
 
             string[] projectionOptions = { "Plane", "WGS-84" };
@@ -484,8 +507,7 @@ namespace GPSSimulator
                 comboBox_ProjectionSelector.Items.Add(projectionOptions[i]);
             }
 
-            comboBox_ProjectionSelector.SelectedIndex = 1;
-            comboBox_ProjectionSelector.Refresh();
+            comboBox_ProjectionSelector.SelectedIndex = Properties.Settings.Default.selectedProjection;
 
             string[] qualityOptions = { "Invalid",
                                         "GPS",
@@ -504,8 +526,7 @@ namespace GPSSimulator
                 comboBox_GPSQualitySelector.Items.Add(qualityOptions[i]);
             }
 
-            comboBox_GPSQualitySelector.SelectedIndex = 2;
-            comboBox_GPSQualitySelector.Refresh();
+            comboBox_GPSQualitySelector.SelectedIndex = Properties.Settings.Default.selectedQualityIndicator;
 
             string[] turnOptions = { "Nearest",
                                      "Right only",
@@ -517,15 +538,14 @@ namespace GPSSimulator
                 comboBox_TurnModeSelector.Items.Add(turnOptions[i]);
             }
 
-            comboBox_TurnModeSelector.SelectedIndex = 0;
-            comboBox_TurnModeSelector.Refresh();
+            comboBox_TurnModeSelector.SelectedIndex = Properties.Settings.Default.selectedTurnMode;
 
             textBox_TargetSpeed.Text = targetSpeed.ToString();
             textBox_Accel.Text = acceleration.ToString();
             textBox_TargetBearing.Text = targetBearing.ToString();
-            textBox_NumSatellites.Text = numSatellites.ToString();
+            textBox_NumSatellites.Text = Properties.Settings.Default.selectedNumSatellites.ToString();
 
-            label_Zoom.Text = getZoomLevelMeters(zoomLevel).ToString();
+            label_Zoom.Text = getZoomLevelMeters(Properties.Settings.Default.selectedZoomLevel).ToString();
         }
 
         private double getZoomLevelMeters(int zoomIndex)
@@ -573,17 +593,17 @@ namespace GPSSimulator
             chart1.Series.FindByName("Position").Points.AddXY(longitude, latitude);
             // Add to trail
             if (chart1.Series.FindByName("Trail").Points.Count >= maxTrailPoints) chart1.Series.FindByName("Trail").Points.RemoveAt(0); // Oldest point at lowest index
-            if (drawTrail) chart1.Series.FindByName("Trail").Points.AddXY(longitude, latitude);
+            if (Properties.Settings.Default.drawTrail) chart1.Series.FindByName("Trail").Points.AddXY(longitude, latitude);
             // Update GUI labels
             label_latitude.Text = latitude.ToString("N8");
             label_longitude.Text = longitude.ToString("N8");
             label_currentSpeed.Text = speed.ToString("N4");
             label_Bearing.Text = bearing.ToString("N4");
             // Move map bounds with fixed zoom
-            chart1.ChartAreas.FindByName("ChartArea1").AxisX.Minimum = longitude - (getZoomLevelMeters(zoomLevel) / 2 / longitudeOffsetFactor[selectedProjection]);
-            chart1.ChartAreas.FindByName("ChartArea1").AxisX.Maximum = longitude + (getZoomLevelMeters(zoomLevel) / 2 / longitudeOffsetFactor[selectedProjection]);
-            chart1.ChartAreas.FindByName("ChartArea1").AxisY.Minimum = latitude - (getZoomLevelMeters(zoomLevel) / 2 / latitudeOffsetFactor[selectedProjection]);
-            chart1.ChartAreas.FindByName("ChartArea1").AxisY.Maximum = latitude + (getZoomLevelMeters(zoomLevel) / 2 / latitudeOffsetFactor[selectedProjection]);
+            chart1.ChartAreas.FindByName("ChartArea1").AxisX.Minimum = longitude - (getZoomLevelMeters(Properties.Settings.Default.selectedZoomLevel) / 2 / longitudeOffsetFactor[Properties.Settings.Default.selectedProjection]);
+            chart1.ChartAreas.FindByName("ChartArea1").AxisX.Maximum = longitude + (getZoomLevelMeters(Properties.Settings.Default.selectedZoomLevel) / 2 / longitudeOffsetFactor[Properties.Settings.Default.selectedProjection]);
+            chart1.ChartAreas.FindByName("ChartArea1").AxisY.Minimum = latitude - (getZoomLevelMeters(Properties.Settings.Default.selectedZoomLevel) / 2 / latitudeOffsetFactor[Properties.Settings.Default.selectedProjection]);
+            chart1.ChartAreas.FindByName("ChartArea1").AxisY.Maximum = latitude + (getZoomLevelMeters(Properties.Settings.Default.selectedZoomLevel) / 2 / latitudeOffsetFactor[Properties.Settings.Default.selectedProjection]);
             // TODO: Implement user-selectable zoom
         }
 
@@ -601,22 +621,22 @@ namespace GPSSimulator
             if (serialPort1.IsOpen)
             {
                 serialPort1.Write(output);
-                serialPort1.Write(newline);
+                serialPort1.Write(Properties.Settings.Default.selectedNewline);
             }
             // Else do nothing, so we don't crash if we cselect the wrong com port!
         }
 
         private void printSettings()
         {
-            Console.WriteLine("Selected COM Port:   " + selectedCOMPort);
-            Console.WriteLine("Selected baud rate:  " + selectedBaudRate);
-            Console.WriteLine("Selected fix rate:   " + selectedFixRate);
+            Console.WriteLine("Selected COM Port:   " + Properties.Settings.Default.selectedCOMPort);
+            Console.WriteLine("Selected baud rate:  " + Properties.Settings.Default.selectedBaudRate);
+            Console.WriteLine("Selected fix rate:   " + Properties.Settings.Default.selectedFixRate);
             string newlinerepresentation = "";
-            if (newline.Contains("\r")) newlinerepresentation += "CR";
-            if (newline.Contains("\n")) newlinerepresentation += "LF";
+            if (Properties.Settings.Default.selectedNewline.Contains("\r")) newlinerepresentation += "CR";
+            if (Properties.Settings.Default.selectedNewline.Contains("\n")) newlinerepresentation += "LF";
             Console.WriteLine("Selected newline:    " + newlinerepresentation);
             string projection = "";
-            switch (selectedProjection)
+            switch (Properties.Settings.Default.selectedProjection)
             {
                 case 0:
                     projection += "Plane";
@@ -630,7 +650,7 @@ namespace GPSSimulator
             }
             Console.WriteLine("Selected projection: " + projection);
             string quality = "";
-            switch (selectedQuality)
+            switch (Properties.Settings.Default.selectedQualityIndicator)
             {
                 case 0:
                     quality += "Invalid";
@@ -668,7 +688,7 @@ namespace GPSSimulator
             }
             Console.WriteLine("Selected quality:    " + quality);
             string turnModeString = "";
-            switch (turnMode)
+            switch (Properties.Settings.Default.selectedTurnMode)
             {
                 case 0:
                     turnModeString += "Nearest";
@@ -690,9 +710,9 @@ namespace GPSSimulator
         {
             try
             {
-                selectedCOMPort = comboBox_COMSelector.SelectedItem.ToString();
+                Properties.Settings.Default.selectedCOMPort = comboBox_COMSelector.SelectedItem.ToString();
                 if (serialPort1.IsOpen) serialPort1.Close();
-                serialPort1.PortName = selectedCOMPort;
+                serialPort1.PortName = Properties.Settings.Default.selectedCOMPort;
                 serialPort1.Open();
                 printSettings();
             }
@@ -708,9 +728,9 @@ namespace GPSSimulator
         {
             try
             {
-                selectedCOMPort = comboBox_COMSelector.Text;
+                Properties.Settings.Default.selectedCOMPort = comboBox_COMSelector.Text;
                 if (serialPort1.IsOpen) serialPort1.Close();
-                serialPort1.PortName = selectedCOMPort;
+                serialPort1.PortName = Properties.Settings.Default.selectedCOMPort;
                 serialPort1.Open();
                 printSettings();
             }
@@ -726,9 +746,9 @@ namespace GPSSimulator
         {
             try
             {
-                selectedBaudRate = int.Parse(comboBox_BaudSelector.SelectedItem.ToString());
+                Properties.Settings.Default.selectedBaudRate = int.Parse(comboBox_BaudSelector.SelectedItem.ToString());
                 if (serialPort1.IsOpen) serialPort1.Close();
-                serialPort1.BaudRate = selectedBaudRate;
+                serialPort1.BaudRate = Properties.Settings.Default.selectedBaudRate;
                 serialPort1.Open();
                 printSettings();
             }
@@ -744,9 +764,9 @@ namespace GPSSimulator
         {
             try
             {
-                selectedBaudRate = int.Parse(comboBox_BaudSelector.SelectedItem.ToString());
+                Properties.Settings.Default.selectedBaudRate = int.Parse(comboBox_BaudSelector.SelectedItem.ToString());
                 if (serialPort1.IsOpen) serialPort1.Close();
-                serialPort1.BaudRate = selectedBaudRate;
+                serialPort1.BaudRate = Properties.Settings.Default.selectedBaudRate;
                 serialPort1.Open();
                 printSettings();
             }
@@ -760,15 +780,15 @@ namespace GPSSimulator
 
         private void comboBox_FixRateSelector_SelectedIndexChanged(object sender, EventArgs e)
         {
-            selectedFixRate = int.Parse(comboBox_FixRateSelector.SelectedItem.ToString());
-            gpsFixTimer.Interval = 1000 / selectedFixRate;
+            Properties.Settings.Default.selectedFixRate = int.Parse(comboBox_FixRateSelector.SelectedItem.ToString());
+            gpsFixTimer.Interval = 1000 / Properties.Settings.Default.selectedFixRate;
             printSettings();
         }
 
         private void comboBox_FixRateSelector_TextUpdate(object sender, EventArgs e)
         {
-            selectedFixRate = int.Parse(comboBox_FixRateSelector.SelectedItem.ToString());
-            gpsFixTimer.Interval = 1000 / selectedFixRate;
+            Properties.Settings.Default.selectedFixRate = int.Parse(comboBox_FixRateSelector.SelectedItem.ToString());
+            gpsFixTimer.Interval = 1000 / Properties.Settings.Default.selectedFixRate;
             printSettings();
         }
 
@@ -777,14 +797,14 @@ namespace GPSSimulator
             switch (comboBox_NewlineSelector.SelectedIndex)
             {
                 case 0: // CR
-                    newline = "\r";
+                    Properties.Settings.Default.selectedNewline = "\r";
                     break;
                 case 1: // LF
-                    newline = "\n";
+                    Properties.Settings.Default.selectedNewline = "\n";
                     break;
                 case 2: // CRLF
                 default:
-                    newline = "\r\n";
+                    Properties.Settings.Default.selectedNewline = "\r\n";
                     break;
             }
 
@@ -796,14 +816,14 @@ namespace GPSSimulator
             switch (comboBox_NewlineSelector.SelectedIndex)
             {
                 case 0: // CR
-                    newline = "\r";
+                    Properties.Settings.Default.selectedNewline = "\r";
                     break;
                 case 1: // LF
-                    newline = "\n";
+                    Properties.Settings.Default.selectedNewline = "\n";
                     break;
                 case 2: // CRLF
                 default:
-                    newline = "\r\n";
+                    Properties.Settings.Default.selectedNewline = "\r\n";
                     break;
             }
 
@@ -812,49 +832,49 @@ namespace GPSSimulator
 
         private void comboBox_ProjectionSelector_SelectedIndexChanged(object sender, EventArgs e)
         {
-            selectedProjection = comboBox_ProjectionSelector.SelectedIndex;
+            Properties.Settings.Default.selectedProjection = comboBox_ProjectionSelector.SelectedIndex;
 
             printSettings();
         }
 
         private void comboBox_ProjectionSelector_TextUpdate(object sender, EventArgs e)
         {
-            selectedProjection = comboBox_ProjectionSelector.SelectedIndex;
+            Properties.Settings.Default.selectedProjection = comboBox_ProjectionSelector.SelectedIndex;
 
             printSettings();
         }
 
         private void comboBox_GPSQualitySelector_SelectedIndexChanged(object sender, EventArgs e)
         {
-            selectedQuality = comboBox_GPSQualitySelector.SelectedIndex;
+            Properties.Settings.Default.selectedQualityIndicator = comboBox_GPSQualitySelector.SelectedIndex;
 
             printSettings();
         }
 
         private void comboBox_GPSQualitySelector_TextUpdate(object sender, EventArgs e)
         {
-            selectedQuality = comboBox_GPSQualitySelector.SelectedIndex;
+            Properties.Settings.Default.selectedQualityIndicator = comboBox_GPSQualitySelector.SelectedIndex;
 
             printSettings();
         }
 
         private void comboBox_TurnModeSelector_SelectedIndexChanged(object sender, EventArgs e)
         {
-            turnMode = comboBox_TurnModeSelector.SelectedIndex;
+            Properties.Settings.Default.selectedTurnMode = comboBox_TurnModeSelector.SelectedIndex;
 
             printSettings();
         }
 
         private void comboBox_TurnModeSelector_TextUpdate(object sender, EventArgs e)
         {
-            turnMode = comboBox_TurnModeSelector.SelectedIndex;
+            Properties.Settings.Default.selectedTurnMode = comboBox_TurnModeSelector.SelectedIndex;
 
             printSettings();
         }
 
         private void checkBox_drawTrail_CheckedChanged(object sender, EventArgs e)
         {
-            drawTrail = checkBox_drawTrail.Checked;
+            Properties.Settings.Default.drawTrail = checkBox_drawTrail.Checked;
         }
 
         private void textBox_TargetSpeed_Leave(object sender, EventArgs e)
@@ -908,19 +928,19 @@ namespace GPSSimulator
 
         private void button_ZoomIn_Click(object sender, EventArgs e)
         {
-            if (zoomLevel > 0)
+            if (Properties.Settings.Default.selectedZoomLevel > 0)
             {
-                zoomLevel--;
-                label_Zoom.Text = getZoomLevelMeters(zoomLevel).ToString();
+                Properties.Settings.Default.selectedZoomLevel--;
+                label_Zoom.Text = getZoomLevelMeters(Properties.Settings.Default.selectedZoomLevel).ToString();
             }
         }
 
         private void button_ZoomOut_Click(object sender, EventArgs e)
         {
-            if (zoomLevel < 7)
+            if (Properties.Settings.Default.selectedZoomLevel < 7)
             { // TODO: Defined zoom limit
-                zoomLevel++;
-                label_Zoom.Text = getZoomLevelMeters(zoomLevel).ToString();
+                Properties.Settings.Default.selectedZoomLevel++;
+                label_Zoom.Text = getZoomLevelMeters(Properties.Settings.Default.selectedZoomLevel).ToString();
             }
         }
 
@@ -978,26 +998,18 @@ namespace GPSSimulator
             label_distanceTraveled.Text = distanceTraveled.ToString("N3");
         }
 
-        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
-        {
-            // Clean up after ourselves!
-            gpsFixTimer.Stop();
-            serialPrintLine("Goodbye!");
-            serialPort1.Close();
-        }
-
 
         private void textBox_NumSatellites_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (e.KeyChar.ToString().Contains("\r") || e.KeyChar.ToString().Contains("\n"))
             {
-                numSatellites = int.Parse(textBox_NumSatellites.Text);
+                Properties.Settings.Default.selectedNumSatellites = int.Parse(textBox_NumSatellites.Text);
             }
         }
 
         private void textBox_NumSatellites_Leave(object sender, EventArgs e)
         { // TODO: parse check on all textboxes?  What if I enter letters?
-            numSatellites = int.Parse(textBox_NumSatellites.Text);
+            Properties.Settings.Default.selectedNumSatellites = int.Parse(textBox_NumSatellites.Text);
         }
 
         private void contributingToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1007,9 +1019,10 @@ namespace GPSSimulator
 
         private void versionToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            // TODO: Better changelog stuff?  Formatting???  Automatgic from github?
-            MessageBox.Show("0.1.1: Fixes COM port bugs and adds max speed\n" +
-                "0.1.0: Inital testing/demo release", "GPS Simulator Changelog");
+            // TODO: Better changelog stuff?  Formatting???  Automagic from github?
+            MessageBox.Show("0.1.2:\tUpdate GGA sentence structure,\n\tAdd persistent settings,\n\tAdd icon to overall package\n" +
+                "0.1.1:\tFixes COM port bugs and adds max speed\n" +
+                "0.1.0:\tInital testing/demo release", "GPS Simulator Changelog");
         }
 
         private void licensesToolStripMenuItem_Click(object sender, EventArgs e)
@@ -1018,6 +1031,15 @@ namespace GPSSimulator
             MessageBox.Show("GPS Simulator is tentatively written under the GPLv3 (https://www.gnu.org/licenses/gpl-3.0.en.html).\n" +
                 "\n" +
                 "At some point before full release, the project will likely be moved to one of the Fair Source licenses (https://fair.io/licenses/)", "GPS Simulator Licenses");
+        }
+
+        private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            // Clean up after ourselves!
+            gpsFixTimer.Stop();
+            serialPrintLine("Goodbye!");
+            serialPort1.Close();
+            Properties.Settings.Default.Save();
         }
     }
 }
