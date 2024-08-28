@@ -176,7 +176,7 @@ namespace GPSSimulator
             //       Differential GPS age
             //       Differential GPS station ID
             //       Checksum
-            string formattedGGA = string.Format("$GPGGA,{0:D2}{1:D2}{2:D2}.{3:D2},{4:N0}{5:N7},{6},{7:N0}{8:N7},{9},{10:D1},{11:D2},{12:N1},{13:N3},{14},{15:N3},{16},{17},{18}",
+            string formattedGGA = string.Format("$GPGGA,{0:D2}{1:D2}{2:D2}.{3:D2},{4:N0}{5:N6},{6},{7:000}{8:N6},{9},{10:D1},{11:D2},{12:N2},{13:N2},{14},{15:N2},{16},{17:N1},{18:D4}",
                 fixTime.Hours, fixTime.Minutes, fixTime.Seconds, fixTime.Milliseconds / 10,
                 Math.Floor(Math.Abs(latitude)), (Math.Abs(latitude) - Math.Floor(Math.Abs(latitude))) * 60, latitude > 0 ? "N" : "S",
                 Math.Floor(Math.Abs(longitude)), (Math.Abs(longitude) - Math.Floor(Math.Abs(longitude))) * 60, longitude > 0 ? "E" : "W",
@@ -187,8 +187,8 @@ namespace GPSSimulator
                 "M",   // Altitude units
                 15.0,  // TODO: undulation (difference between WGS-84 ellipsoid and "the geoid"
                 "M",   // Undulation units
-                null,  // differential GPS correction data age (empty when DGPS not present)
-                null   // DGPS base station ID (empty when DGPS not present)
+                0.0,  // differential GPS correction data age (empty when DGPS not present)
+                0   // DGPS base station ID (empty when DGPS not present)
                 );
 
             formattedGGA = addChecksum(formattedGGA);
