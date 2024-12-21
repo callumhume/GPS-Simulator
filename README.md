@@ -13,12 +13,12 @@ This project is a shameless recreation / improvement upon the GPS simulator crea
 - Configurable number of satellites in use,
 - Configurable fix type (quality indicator),
 - Tracked total distance,
+- Dynamic WGS-84 compensation (one degree of longitude is a shorter distance closer to the poles than it is at the equator),
 
 ### Roadmap
 
 - Selectable demo drive mode (currently hard-coded selection from five available modes),
 - Selectable unit system (currently metric-only),
-- Dynamic WGS-84 compensation (currently only works near 45 degrees latitude),
 - Configurable swath width,
     - Automatic back-and-forth driving,
         - Selectable turn-around method (large circle or three-point),
